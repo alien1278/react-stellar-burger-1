@@ -1,0 +1,31 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.name {
+  font-size: 24px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.img {
+  width: 480px;
+  height: 240px;
+}
+
+.elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  column-gap: 20px;
+}
+
+.element {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}

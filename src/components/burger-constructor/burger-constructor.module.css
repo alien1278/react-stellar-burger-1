@@ -1,0 +1,47 @@
+.constructor {
+  display: flex;
+  flex-direction: column;
+}
+.elements {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 280px;
+  row-gap: 16px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+}
+.element {
+  display: flex;
+  align-items: center;
+}
+.constructorElement {
+  margin: 0 8px 0;
+  width: 100%;
+}
+.elements::-webkit-scrollbar {
+  width: 8px;
+
+  background-color: rgba(47, 47, 55, 1);
+}
+
+.elements::-webkit-scrollbar-thumb {
+  height: 200px;
+  background-color: rgba(133, 133, 173, 1);
+}
+
+.elements::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(99, 99, 128);
+}
+.info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.price {
+  display: flex;
+  align-items: center;
+}

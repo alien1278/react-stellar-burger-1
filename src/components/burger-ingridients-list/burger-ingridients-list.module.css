@@ -1,0 +1,6 @@
+.colomn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 24px;
+  margin: 24px 16px 0;
+}
