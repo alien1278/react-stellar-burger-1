@@ -11,6 +11,7 @@ import {
   sortConstructorIngredients,
 } from "../../services/ingredientsSlice";
 import style from "../burger-constructor/burger-constructor.module.css";
+import { ingredientType } from "../../utils/types";
 
 function ConstructorElements({ ingredient, id, index }) {
   const { name, price, image } = ingredient;
@@ -88,7 +89,7 @@ function ConstructorElements({ ingredient, id, index }) {
 }
 
 ConstructorElements.propTypes = {
-  ingredient: PropTypes.object.isRequired,
+  ingredients: PropTypes.arrayOf(ingredientType),
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 };

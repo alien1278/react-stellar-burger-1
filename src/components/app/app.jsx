@@ -3,7 +3,7 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
 import { useDispatch } from "react-redux";
-import { getIngredients } from "../../services/ingredientsSlice";
+import { getIngredients } from "../../services/actions/ingredent";
 
 function App() {
   const dispatch = useDispatch();

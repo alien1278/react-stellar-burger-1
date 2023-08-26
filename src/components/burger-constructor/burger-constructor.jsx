@@ -8,9 +8,10 @@ import style from "./burger-constructor.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { addIngredient, sendOrder } from "../../services/ingredientsSlice";
-import ConstructorElements from "../constructor-elements/constructorElements";
+import { addIngredient } from "../../services/ingredientsSlice";
+import ConstructorElements from "../constructor-elements/constructor-elements";
 import { showModal } from "../../services/modalSlice";
+import { sendOrder } from "../../services/actions/order";
 
 function BurgerConstructor() {
   const dispatch = useDispatch();

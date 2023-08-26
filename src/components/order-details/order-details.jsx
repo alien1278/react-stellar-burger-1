@@ -1,10 +1,10 @@
 import React from "react";
-import style from "./OrderDetails.module.css";
+import style from "./order-details.module.css";
 import image from "../../images/done.svg";
 import { useSelector } from "react-redux";
 
 const OrderDetails = () => {
-  const { createdOrder } = useSelector((state) => state.ingredients);
+  const { createdOrder } = useSelector((state) => state.order);
 
   return (
     <div className={`${style.modal}`}>

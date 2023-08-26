@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createOrderRequest, getIngredientsRequest } from "../utils/api";
 import { v4 as generateUniqueId } from "uuid";
 
 const newIngredientsSlice = createSlice({
@@ -8,11 +7,7 @@ const newIngredientsSlice = createSlice({
     list: [],
     ingredientsRequest: false,
     ingredientsFailed: false,
-    createdOrder: null,
-
     chosenIngredients: [],
-    orderFailed: false,
-    orderRequest: false,
   },
   reducers: {
     getIngredientRequest(state) {
@@ -27,18 +22,7 @@ const newIngredientsSlice = createSlice({
       state.ingredientsFailed = true;
       state.ingredientsRequest = true;
     },
-    getCreatedOrder(state) {
-      state.orderRequest = true;
-      state.orderFailed = false;
-    },
-    getCreatedOrderSuccess(state, action) {
-      state.orderRequest = false;
-      state.createdOrder = action.payload;
-    },
-    getCreatedOrderFailed(state) {
-      state.orderRequest = false;
-      state.orderFailed = true;
-    },
+
     sortConstructorIngredients(state, action) {
       const dragCard = state.chosenIngredients[action.payload.dragIndex];
       state.chosenIngredients.splice(action.payload.dragIndex, 1);
@@ -80,35 +64,4 @@ export const {
   deleteIngredient,
   sortConstructorIngredients,
   addIngredient,
-  getCreatedOrder,
-  getCreatedOrderSuccess,
-  getCreatedOrderFailed,
 } = newIngredientsSlice.actions;
-
-// Thunk function
-export function getIngredients() {
-  return function (dispatch) {
-    dispatch(getIngredientRequest());
-    return getIngredientsRequest().then((res) => {
-      if (res && res.success) {
-        dispatch(getIngredientsSuccess(res.data));
-      } else {
-        dispatch(getIngredientsFailed());
-      }
-    });
-  };
-}
-export function sendOrder(ingredientsId) {
-  return async function (dispatch) {
-    dispatch(getCreatedOrder());
-
-    const res = await createOrderRequest(ingredientsId);
-
-    if (res && res.success) {
-      console.log(res);
-      dispatch(getCreatedOrderSuccess(res));
-    } else {
-      dispatch(getCreatedOrderFailed());
-    }
-  };
-}
