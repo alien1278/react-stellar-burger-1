@@ -12,11 +12,13 @@ import { addIngredient } from "../../services/ingredientsSlice";
 import ConstructorElements from "../constructor-elements/constructor-elements";
 import { showModal } from "../../services/modalSlice";
 import { sendOrder } from "../../services/actions/order";
+import { useNavigate } from "react-router-dom";
 
 function BurgerConstructor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { chosenIngredients } = useSelector((state) => state.ingredients);
-
+  const { userInfo } = useSelector((state) => state.users);
   const [, dropRef] = useDrop({
     accept: "ingredient",
     drop(item) {
@@ -46,10 +48,13 @@ function BurgerConstructor() {
     undefined;
   const openOrderDetails = async () => {
     const ingredientsId = chosenIngredients.map((ingredient) => ingredient._id);
-    await dispatch(sendOrder(ingredientsId));
-    dispatch(showModal({ name: "order" }));
+    if (userInfo) {
+      await dispatch(sendOrder(ingredientsId));
+      dispatch(showModal({ name: "order" }));
+    } else {
+      await navigate("/login");
+    }
   };
-
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={`${style.content} mt-25 ml-4 mr-4`} ref={dropRef}>

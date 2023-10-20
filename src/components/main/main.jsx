@@ -10,11 +10,24 @@ import { hideModal } from "../../services/modalSlice";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Modal from "../modal/modal.jsx";
+import {
+  Route,
+  Routes,
+  useLocation,
+  useMatches,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 function Main() {
   const modalState = useSelector((store) => store.modal);
 
   const dispatch = useDispatch();
+
+  const navParams = useParams();
+  const navigate = useNavigate();
+
+  const isListLoaded = useSelector((st) => st.ingredients.list.length > 0);
 
   return (
     <main className={style.main}>
@@ -28,12 +41,9 @@ function Main() {
             <OrderDetails />
           </Modal>
         )}
-        {modalState.name === "details" && (
-          <Modal
-            title="Детали ингредиента"
-            onClose={() => dispatch(hideModal())}
-          >
-            <IngredientDetails />
+        {isListLoaded && navParams && navParams.id && (
+          <Modal title="Детали ингредиента" onClose={() => navigate("/")}>
+            <IngredientDetails id={navParams.id} />
           </Modal>
         )}
       </section>
