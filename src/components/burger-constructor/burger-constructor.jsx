@@ -1,70 +1,122 @@
-import React from 'react';
-import { DragIcon, ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import style from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
+import React, { useMemo } from "react";
+import {
+  ConstructorElement,
+  Button,
+  CurrencyIcon,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import style from "./burger-constructor.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { DndProvider, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { addIngredient } from "../../services/ingredientsSlice";
+import ConstructorElements from "../constructor-elements/constructor-elements";
+import { showModal } from "../../services/modalSlice";
+import { sendOrder } from "../../services/actions/order";
 
- function BurgerConstructor({ingredientsData,onClick }) {
+function BurgerConstructor() {
+  const dispatch = useDispatch();
+  const { chosenIngredients } = useSelector((state) => state.ingredients);
+
+  const [, dropRef] = useDrop({
+    accept: "ingredient",
+    drop(item) {
+      dispatch(addIngredient({ id: item._id }));
+    },
+  });
+  const sum = useMemo(
+    () =>
+      chosenIngredients.reduce(
+        (acc, cur) =>
+          cur.type === "bun" ? acc + cur.price * 2 : acc + cur.price,
+        0
+      ),
+    [chosenIngredients]
+  );
+  const bunHandler = (chosenIngredients, property, trueValue, falseValue) =>
+    chosenIngredients.find((ingredient) => ingredient.type === "bun")
+      ? `${
+          chosenIngredients.find((ingredient) => ingredient.type === "bun")[
+            property
+          ]
+        } ${trueValue}`
+      : falseValue;
+
+  const isBun =
+    chosenIngredients.find((ingredient) => ingredient.type === "bun") !==
+    undefined;
+  const openOrderDetails = async () => {
+    const ingredientsId = chosenIngredients.map((ingredient) => ingredient._id);
+    await dispatch(sendOrder(ingredientsId));
+    dispatch(showModal({ name: "order" }));
+  };
 
   return (
-    <div className={`${style.content} mt-25 ml-4 mr-4`}><div className={`${style.constructor} `}>
-        <div className={`${style.topElement} ml-8 mr-4`}>
-          {ingredientsData[0] && <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={ingredientsData[0].name}
-            price={ingredientsData[0].price}
-            thumbnail={ingredientsData[0].image}/>}
-        </div>
-        <div className={`${style.elements} mt-4 mb-4 `}>
-          {ingredientsData.filter(ingredient => ingredient.type !== 'bun').map((ingredient, i) => { 
-            return (
-              <div key={i}  className={`${style.element}`}>
-                <DragIcon />
-                <div className={style.constructorElement}>
-                  <ConstructorElement
-                    text={ingredient.name}
-                    price={ingredient.price}
-                    thumbnail={ingredient.image}/>
-                </div>
-              </div>
-            )})
-          }
-        </div>
-        <div className={`${style.bottomElement} ml-8 mr-4`}>
-          {ingredientsData[0] &&<ConstructorElement
-            type="bottom"
-          isLocked={true}
-          text={ingredientsData[0].name}
-          price={ingredientsData[0].price}
-          thumbnail={ingredientsData[0].image} />}</div>
+    <DndProvider backend={HTML5Backend}>
+      <div className={`${style.content} mt-25 ml-4 mr-4`} ref={dropRef}>
+        <div className={`${style.constructor} `}>
+          <div className={`${style.topElement} ml-8 mr-4`}>
+            {isBun && (
+              <ConstructorElement
+                type="top"
+                isLocked={true}
+                text={bunHandler(
+                  chosenIngredients,
+                  "name",
+                  "(верх)",
+                  "Выберите булку"
+                )}
+                price={bunHandler(chosenIngredients, "price", "", "0")}
+                thumbnail={bunHandler(chosenIngredients, "image", "", "")}
+              />
+            )}
+          </div>
+          <div className={`${style.elements} mt-4 mb-4 `}>
+            {chosenIngredients.map(
+              (item, index) =>
+                item.type !== "bun" && (
+                  <ConstructorElements
+                    key={item.uuid}
+                    index={index}
+                    ingredient={item}
+                    id={`${item._id}${index}`}
+                  />
+                )
+            )}
+          </div>
+          <div className={`${style.bottomElement} ml-8 mr-4`}>
+            {isBun && (
+              <ConstructorElement
+                type="bottom"
+                isLocked={true}
+                text={bunHandler(
+                  chosenIngredients,
+                  "name",
+                  "(низ)",
+                  "Выберите булку"
+                )}
+                price={bunHandler(chosenIngredients, "price", "", "0")}
+                thumbnail={bunHandler(chosenIngredients, "image", "", "")}
+              />
+            )}
+          </div>
         </div>
         <div className={`${style.info} mt-10 mb-10 mr-4`}>
           <div className={`${style.price} mr-10`}>
-            <p className="text text_type_digits-medium mr-2">610</p>
+            <p className="text text_type_digits-medium mr-2">{sum}</p>
             <CurrencyIcon type="primary" />
           </div>
-          <Button type="primary" size="medium" onClick={onClick} htmlType="submit" >
+          <Button
+            type="primary"
+            size="medium"
+            onClick={openOrderDetails}
+            htmlType="submit"
+          >
             Оформить заказ
           </Button>
         </div>
-    </div>
+      </div>
+    </DndProvider>
   );
+}
 
-};
-
-BurgerConstructor.propTypes = {
-  ingredientsData: PropTypes.arrayOf(PropTypes.shape({
-     _id: PropTypes.string.isRequired,
-     name: PropTypes.string.isRequired,   
-     type: PropTypes.string.isRequired,
-     proteins: PropTypes.number.isRequired,
-     fat:PropTypes.number.isRequired,
-     carbohydrates:PropTypes.number.isRequired,
-     calories:PropTypes.number.isRequired,
-     price:PropTypes.number.isRequired,
-     image:PropTypes.string.isRequired,
-
-  })),
-  onClick: PropTypes.func.isRequired,
-};
-export default  BurgerConstructor;
+export default BurgerConstructor;

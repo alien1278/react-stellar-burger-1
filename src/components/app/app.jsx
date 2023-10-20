@@ -1,40 +1,25 @@
-
-import { useEffect, useState } from 'react';
+import { useEffect } from "react";
 import styles from "./app.module.css";
-import AppHeader from '../app-header/app-header'
+import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
+import { useDispatch } from "react-redux";
+import { getIngredients } from "../../services/actions/ingredent";
 
 function App() {
+  const dispatch = useDispatch();
 
-  const URL = "https://norma.nomoreparties.space/api/ingredients";
-  const [ingredientsData, setIngredientsData] = useState([])
-
-  useEffect(
-    () => {
-      fetch ( `${URL}`, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(res => {
-        return res.json()
-      }).then(res => {
-        setIngredientsData(res.data)
-      }).catch(err => 
-        console.log(err)
-      )
-    }, [])
-
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   return (
-   <div className={styles.app}>
-    <div className="pb-4 pt-4"> 
-      <AppHeader />
+    <div className={styles.app}>
+      <div className="pb-4 pt-4">
+        <AppHeader />
       </div>
-      <Main ingredientsData={ingredientsData}/>
+      <Main />
     </div>
   );
 }
 
 export default App;
-
