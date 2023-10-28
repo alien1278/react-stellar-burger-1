@@ -4,6 +4,8 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
 }
 .price {
   display: flex;

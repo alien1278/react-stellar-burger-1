@@ -3,10 +3,10 @@ import style from "./ingredient-details.module.css";
 
 import { useSelector } from "react-redux";
 
-const IngredientDetails = () => {
+const IngredientDetails = ({ id }) => {
   const { name, proteins, fat, carbohydrates, calories, image } = useSelector(
     (state) => {
-      const id = state.modal.data.id;
+      // const id = state.modal.data.id;
 
       return state.ingredients.list.find(({ _id }) => _id === id);
     }

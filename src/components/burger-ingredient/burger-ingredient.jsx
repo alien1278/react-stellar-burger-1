@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "../../services/modalSlice";
 import { useDrag } from "react-dnd";
+import { Link } from "react-router-dom";
 
 const BurgerIngredient = ({ ingredient }) => {
   const { name, price, image, _id } = ingredient;
@@ -32,13 +33,12 @@ const BurgerIngredient = ({ ingredient }) => {
   );
 
   return (
-    <div
+    <Link
       className={`${style.item}  ${isDrag}`}
       data-id={_id}
       ref={dragRef}
-      onClick={() => {
-        dispatch(showModal({ name: "details", data: { id: _id } }));
-      }}
+      to={"/ingredients/" + _id}
+      state={{ showModal: true }}
     >
       <img className={`pr-4 pl-4`} src={image} alt="" />
       <div className={`${style.price} mt-1`}>
@@ -49,7 +49,7 @@ const BurgerIngredient = ({ ingredient }) => {
       <div className={style.count}>
         {counter > 0 && <Counter count={counter} size="default" />}
       </div>
-    </div>
+    </Link>
   );
 };
 
