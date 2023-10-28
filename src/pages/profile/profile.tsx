@@ -1,10 +1,12 @@
 import { NavLink, Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../services/actions/users";
+import React, { FC } from "react";
 import ProfileInfo from "../../components/profile-info/profile-info";
 import style from "./profile.module.css";
-const Profile = () => {
-  const dispatch = useDispatch();
+import { useAppDispatch } from "../../services/hook";
+const Profile: FC = () => {
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -17,7 +19,7 @@ const Profile = () => {
         <ul className={`${style.items}`}>
           <li>
             <NavLink
-              className={({ isActive }) =>
+              className={({ isActive }: { isActive: boolean }) =>
                 isActive
                   ? `${style.link_active} text text_type_main-medium`
                   : `${style.link} text text_type_main-medium`
@@ -29,7 +31,7 @@ const Profile = () => {
           </li>
           <li>
             <NavLink
-              className={({ isActive }) =>
+             className={({ isActive }: { isActive: boolean }) =>
                 isActive
                   ? `${style.link_active} text text_type_main-medium`
                   : `${style.link} text text_type_main-medium`
@@ -41,7 +43,7 @@ const Profile = () => {
           </li>
           <li>
             <NavLink
-              className={({ isActive }) =>
+              className={({ isActive }: { isActive: boolean }) =>
                 isActive
                   ? `${style.link_active} text text_type_main-medium`
                   : `${style.link} text text_type_main-medium`

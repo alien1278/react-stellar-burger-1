@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, FC, FormEvent, ChangeEvent } from "react";
 import style from "./forgot-password.module.css";
 import {
   Input,
@@ -7,20 +7,25 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { forgotPassword } from "../../services/actions/users";
+import { useAppDispatch } from "../../services/hook";
 
-const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const inputRef = useRef(null);
+const ForgotPassword: FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
     alert("Icon Click Callback");
   };
 
-  const sendData = (e) => {
+  const sendData = (e:FormEvent) => {
     e.preventDefault();
 
     if (!email) {
@@ -31,7 +36,9 @@ const ForgotPassword = () => {
     setEmail("");
     navigate("/reset-password");
   };
-
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
   return (
     <>
       <form onSubmit={sendData} className={`${style.form} mt-30 mb-20`}>
@@ -40,7 +47,7 @@ const ForgotPassword = () => {
         <div className="mb-6">
           <Input
             type={"email"}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInputChange}
             value={email}
             error={false}
             ref={inputRef}
@@ -51,7 +58,7 @@ const ForgotPassword = () => {
           />
         </div>
 
-        <Button type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Востановить
         </Button>
       </form>

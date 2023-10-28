@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect,FC } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/ModalOverlay";
+import { IModalProps } from "../../utils/types";
 
 const modalRoot = document.getElementById("modalRoot");
 
-function Modal({ title, onClose, children }) {
+const Modal:FC<IModalProps> =({ title, onClose, children })=> {
   useEffect(() => {
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: KeyboardEvent) => {
       e.key === "Escape" && onClose();
     };
 
@@ -18,7 +19,10 @@ function Modal({ title, onClose, children }) {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [onClose]);
-
+  if (!modalRoot) {
+    console.error("Modal root not found");
+    return null;
+}
   return ReactDOM.createPortal(
     <>
       <div className={`${style.modal} pl-10 pr-10`}>

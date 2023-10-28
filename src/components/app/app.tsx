@@ -1,3 +1,5 @@
+
+import React, { FC } from "react";
 import { useEffect } from "react";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
@@ -15,7 +17,7 @@ import Login from "../../pages/login/login";
 import Register from "../../pages/register/register";
 import ForgotPassword from "../../pages/forgot-password/forgot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
-import IngredientsId from "../../pages/ingredients-id/ingredients-id";
+import IngredientsPage from "../../pages/ingredients-page/ingredients-page";
 import NotFound404 from "../../pages/not-found-404/not-found-404";
 import Profile from "../../pages/profile/profile";
 import ProtectedRoute from "../protected-route/protected-route";
@@ -24,28 +26,31 @@ import OrderDetails from "../order-details/order-details";
 import { hideModal } from "../../services/modalSlice";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getUserData, refreshToken } from "../../services/actions/users";
+import { useAppDispatch } from "../../services/hook";
 
-const BurgerIngredientRoute = () => {
+const BurgerIngredientRoute: FC= () => {
   let { state } = useLocation();
 
-  return state?.showModal ? <Main /> : <IngredientsId />;
+  return state?.showModal ? <Main /> : <IngredientsPage />;
 };
 
-function App() {
-  const dispatch = useDispatch();
+const App: FC = () => {
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  useEffect(() => {
+   useEffect(() => {
     const exec = async () => {
       const token = localStorage.getItem("refreshToken");
 
       if (token) {
         const accessToken = await dispatch(refreshToken(token));
 
-        dispatch(getUserData(accessToken));
+        if (typeof accessToken === 'string') {
+          dispatch(getUserData(accessToken));
+        }
       }
     };
     exec();

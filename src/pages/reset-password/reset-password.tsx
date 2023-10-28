@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef,FC, useState, FormEvent } from "react";
 import {
   Input,
   Button,
@@ -7,26 +7,33 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../../services/actions/users";
 import style from "./reset-password.module.css";
+import { useAppDispatch, useAppSelector } from "../../services/hook";
 
-const ResetPassword = () => {
-  const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [typeInput, setTypeInput] = useState("password");
-  const [icon, setIcon] = useState("ShowIcon");
-  const { userInfo, isForgotPassword } = useSelector((state) => state.users);
-  const inputRef = useRef(null);
+const ResetPassword: FC = () => {
+  
+  const [code, setCode] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [typeInput, setTypeInput] = useState<"password" | "email">("password");
+  const [icon, setIcon] = useState<"ShowIcon" | "HideIcon">("ShowIcon");
+
+
+  const { userInfo, isForgotPassword } = useAppSelector((state) => state.users);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
 
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
+    setTimeout(() => {
+      if (inputRef.current) { 
+        inputRef.current.focus();
+      }
+    }, 0);
     setTypeInput(typeInput === "password" ? "email" : "password");
     setIcon(icon === "ShowIcon" ? "HideIcon" : "ShowIcon");
   };
-
-  const sendData = (e) => {
+  const sendData = (e: FormEvent) => {
     e.preventDefault();
 
     if (!code || !password) {
@@ -77,14 +84,14 @@ const ResetPassword = () => {
             name={"code"}
             error={false}
             ref={inputRef}
-            onIconClick={""}
+          
             errorText={"Ошибка"}
             size={"default"}
             placeholder={"Введите код из письма"}
           />
         </div>
 
-        <Button type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Сохранить
         </Button>
       </form>

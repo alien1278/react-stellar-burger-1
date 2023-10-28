@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, FormEvent, SyntheticEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Input,
@@ -6,50 +6,56 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { sendUserData } from "../../services/actions/users";
 import style from "./profile-info.module.css";
+import { useAppDispatch, useAppSelector } from "../../services/hook";
 
-const ProfileInfo = () => {
-  const { token, userInfo } = useSelector((state) => state.users);
-  const dispatch = useDispatch();
+const ProfileInfo: FC = () => {
+  const { token, userInfo } = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
 
-  const [name, setName] = useState("");
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [isDataChanged, setIsDataChanged] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [login, setLogin] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isDataChanged, setIsDataChanged] = useState<boolean>(false);
 
-  const nameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-  const onNameClick = () => nameRef.current.focus();
-  const onEmailClick = () => emailRef.current.focus();
-  const onPasswordClick = () => passwordRef.current.focus();
+  const onNameClick = () => nameRef.current?.focus();
+  const onEmailClick = () => emailRef.current?.focus();
+  const onPasswordClick = () => passwordRef.current?.focus();
 
-  const onNameChange = (evt) => {
+
+  const onNameChange = (evt:  ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setName(value);
-    value === userInfo.name ? setIsDataChanged(false) : setIsDataChanged(true);
-  };
-  const onEmailChange = (evt) => {
+    value === (userInfo ? userInfo.name : null) ? setIsDataChanged(false) : setIsDataChanged(true);
+};
+
+const onEmailChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setLogin(value);
-    value === userInfo.email ? setIsDataChanged(false) : setIsDataChanged(true);
-  };
-  const onPasswordChange = (evt) => {
+    value === (userInfo ? userInfo.email : null) ? setIsDataChanged(false) : setIsDataChanged(true);
+};
+  const onPasswordChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setPassword(value);
     value === password ? setIsDataChanged(false) : setIsDataChanged(true);
   };
 
-  const onSubmit = (evt) => {
+  const onSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     dispatch(sendUserData(token, name, login, password));
     setIsDataChanged(false);
   };
 
-  const onCancelEditing = (evt) => {
+    const onCancelEditing = (evt: SyntheticEvent <Element, Event>) => {
+
     evt.preventDefault();
-    setName(userInfo.name);
-    setLogin(userInfo.email);
+    if (userInfo) {
+      setName(userInfo.name);
+      setLogin(userInfo.email);
+  }
     setPassword("");
     setIsDataChanged(false);
   };
@@ -109,10 +115,15 @@ const ProfileInfo = () => {
 
       {isDataChanged && (
         <div className={style.buttons}>
-          <Button onClick={onCancelEditing} type="secondary" size="medium">
+          <Button
+            htmlType="submit"
+            onClick={onCancelEditing}
+            type="secondary"
+            size="medium"
+          >
             Отмена
           </Button>
-          <Button type="primary" size="medium">
+          <Button htmlType="submit" type="primary" size="medium">
             Сохранить
           </Button>
         </div>

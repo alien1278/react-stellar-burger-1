@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, FC } from "react";
 import {
   ConstructorElement,
   Button,
@@ -13,15 +13,18 @@ import ConstructorElements from "../constructor-elements/constructor-elements";
 import { showModal } from "../../services/modalSlice";
 import { sendOrder } from "../../services/actions/order";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../services/hook";
+import { IIngredient } from "../../utils/types";
 
-function BurgerConstructor() {
-  const dispatch = useDispatch();
+const BurgerConstructor:FC = () =>{
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { chosenIngredients } = useSelector((state) => state.ingredients);
-  const { userInfo } = useSelector((state) => state.users);
+  const  {chosenIngredients} = useAppSelector((state) => state.ingredients);
+  const { userInfo } = useAppSelector((state) => state.users);
+
   const [, dropRef] = useDrop({
     accept: "ingredient",
-    drop(item) {
+    drop(item:IIngredient) {
       dispatch(addIngredient({ id: item._id }));
     },
   });
@@ -34,14 +37,15 @@ function BurgerConstructor() {
       ),
     [chosenIngredients]
   );
-  const bunHandler = (chosenIngredients, property, trueValue, falseValue) =>
-    chosenIngredients.find((ingredient) => ingredient.type === "bun")
-      ? `${
-          chosenIngredients.find((ingredient) => ingredient.type === "bun")[
-            property
-          ]
-        } ${trueValue}`
-      : falseValue;
+  const bunHandler = (chosenIngredients: IIngredient[], property:  keyof IIngredient, trueValue: string, falseValue: string) =>{
+  const foundBun = chosenIngredients.find(ingredient => ingredient.type === 'bun');
+
+  if (foundBun && property in foundBun) {
+    return `${foundBun[property]} ${trueValue}`;
+  }
+
+  return falseValue;
+}
 
   const isBun =
     chosenIngredients.find((ingredient) => ingredient.type === "bun") !==
@@ -70,7 +74,7 @@ function BurgerConstructor() {
                   "(верх)",
                   "Выберите булку"
                 )}
-                price={bunHandler(chosenIngredients, "price", "", "0")}
+                price={+bunHandler(chosenIngredients, "price", "", '0')}
                 thumbnail={bunHandler(chosenIngredients, "image", "", "")}
               />
             )}
@@ -99,7 +103,7 @@ function BurgerConstructor() {
                   "(низ)",
                   "Выберите булку"
                 )}
-                price={bunHandler(chosenIngredients, "price", "", "0")}
+                price={+bunHandler(chosenIngredients, "price", "", "0")}
                 thumbnail={bunHandler(chosenIngredients, "image", "", "")}
               />
             )}
