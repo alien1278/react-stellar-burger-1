@@ -1,16 +1,18 @@
-import React,{FC} from "react";
+import React, { FC } from "react";
 import style from "./order-details.module.css";
 import image from "../../images/done.svg";
 import { useSelector } from "react-redux";
 import { useAppSelector } from "../../services/hook";
 
-const OrderDetails:FC = () => {
+const OrderDetails: FC = () => {
   const { createdOrder } = useAppSelector((state) => state.order);
 
   return (
     <div className={`${style.modal}`}>
       <div className="text text_type_digits-large mb-8 ">
-      {createdOrder && createdOrder.order && <p>{createdOrder.order.number}</p>}
+        {createdOrder && createdOrder.order && (
+          <p>{createdOrder.order.number}</p>
+        )}
       </div>
       <p className="text text_type_main-default">Индификатор заказа</p>
       <img src={image} alt="" className={`${style.image} m-15`} />

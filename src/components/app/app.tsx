@@ -1,16 +1,12 @@
-
-import React, { FC } from "react";
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
-import { useDispatch, useSelector } from "react-redux";
-import { getIngredients } from "../../services/actions/ingredent";
+import { getIngredients } from "../../services/actions/ingredient";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Outlet,
   useLocation,
 } from "react-router-dom";
 import Login from "../../pages/login/login";
@@ -21,19 +17,33 @@ import IngredientsPage from "../../pages/ingredients-page/ingredients-page";
 import NotFound404 from "../../pages/not-found-404/not-found-404";
 import Profile from "../../pages/profile/profile";
 import ProtectedRoute from "../protected-route/protected-route";
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
-import { hideModal } from "../../services/modalSlice";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getUserData, refreshToken } from "../../services/actions/users";
 import { useAppDispatch } from "../../services/hook";
+import OrdersFeed from "../../pages/feed/feed";
+import FeedId from "../../pages/feed-id/feed-id";
+import OrdersFeedHistory from "../../pages/feed-history/feed-history";
 
-const BurgerIngredientRoute: FC= () => {
+const BurgerIngredientRoute: FC = () => {
   let { state } = useLocation();
 
   return state?.showModal ? <Main /> : <IngredientsPage />;
 };
+const BurgerOrderRoute: FC = () => {
+  let { state } = useLocation();
 
+  return state?.showModal ? <OrdersFeed /> : <FeedId />;
+};
+const BurgerMyOrderRoute: FC = () => {
+  let { state } = useLocation();
+
+  return state?.showModal ? (
+    <Profile>
+      <OrdersFeedHistory />
+    </Profile>
+  ) : (
+    <FeedId authed />
+  );
+};
 const App: FC = () => {
   const dispatch = useAppDispatch();
 
@@ -41,14 +51,14 @@ const App: FC = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-   useEffect(() => {
+  useEffect(() => {
     const exec = async () => {
       const token = localStorage.getItem("refreshToken");
 
       if (token) {
         const accessToken = await dispatch(refreshToken(token));
 
-        if (typeof accessToken === 'string') {
+        if (typeof accessToken === "string") {
           dispatch(getUserData(accessToken));
         }
       }
@@ -67,12 +77,12 @@ const App: FC = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/ingredients/:id" element={<BurgerIngredientRoute />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="*" element={<NotFound404 />} />
+          <Route path="feed" element={<OrdersFeed />} />
+          <Route path="feed/:id" element={<BurgerOrderRoute />} />
           <Route
             path="profile/*"
             element={
@@ -81,10 +91,12 @@ const App: FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="profile/orders/:id" element={<BurgerMyOrderRoute />} />
+          <Route path="*" element={<NotFound404 />} />
         </Routes>
       </Router>
     </>
   );
-}
+};
 
 export default App;

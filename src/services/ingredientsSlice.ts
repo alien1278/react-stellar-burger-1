@@ -1,18 +1,20 @@
-import { IIngredient } from './../utils/types';
+import { IIngredient } from "./../utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as generateUniqueId } from "uuid";
+import { RootState } from "./store";
+
 type TIngredientsState = {
-  list: IIngredient[],
-  ingredientsRequest: boolean,
-  ingredientsFailed: boolean,
-  chosenIngredients: IIngredient[],
+  list: IIngredient[];
+  ingredientsRequest: boolean;
+  ingredientsFailed: boolean;
+  chosenIngredients: IIngredient[];
 };
-const initialState: TIngredientsState ={
+const initialState: TIngredientsState = {
   list: [],
   ingredientsRequest: false,
   ingredientsFailed: false,
   chosenIngredients: [],
-}
+};
 const newIngredientsSlice = createSlice({
   name: "ingredients",
   initialState,
@@ -30,7 +32,10 @@ const newIngredientsSlice = createSlice({
       state.ingredientsRequest = true;
     },
 
-    sortConstructorIngredients(state, action: PayloadAction<{ dragIndex: number, hoverIndex: number }>) {
+    sortConstructorIngredients(
+      state,
+      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
+    ) {
       const dragCard = state.chosenIngredients[action.payload.dragIndex];
       state.chosenIngredients.splice(action.payload.dragIndex, 1);
       state.chosenIngredients.splice(action.payload.hoverIndex, 0, dragCard);
@@ -40,22 +45,25 @@ const newIngredientsSlice = createSlice({
         (item, index) => index !== action.payload
       );
     },
-
+    clearIngredients(state) {
+      state.chosenIngredients = []; // Обнуляем массив выбранных ингредиентов
+    },
     addIngredient(state, action: PayloadAction<{ id: string }>) {
       const foundIngredient = state.list.find(
         (ingredient) => ingredient._id === action.payload.id
       );
-    
-      if (!foundIngredient) return; 
-    
+      if (!foundIngredient) return;
       const targetIngredient: IIngredient = {
         ...foundIngredient,
-        uuid: generateUniqueId()
+        uuid: generateUniqueId(),
       };
+
       if (targetIngredient.type === "bun") {
         state.chosenIngredients = state.chosenIngredients.filter(
           ({ type }) => type !== "bun"
         );
+
+        state.chosenIngredients.push(targetIngredient);
         state.chosenIngredients.push(targetIngredient);
       } else {
         state.chosenIngredients.push(targetIngredient);
@@ -63,7 +71,9 @@ const newIngredientsSlice = createSlice({
     },
   },
 });
-
+export const selectIngredients = (state: RootState) => {
+  return state.ingredients.list;
+};
 export const newIngredientsSliceReducer = newIngredientsSlice.reducer;
 
 export const {
@@ -71,6 +81,7 @@ export const {
   getIngredientsSuccess,
   getIngredientsFailed,
   deleteIngredient,
+  clearIngredients,
   sortConstructorIngredients,
   addIngredient,
 } = newIngredientsSlice.actions;

@@ -1,5 +1,6 @@
-import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUserData, IUserInfo } from "../utils/types";
+import { RootState } from "./store";
 type UsersState = {
   registrationRequest: boolean;
   registrationFailed: boolean;
@@ -13,7 +14,7 @@ type UsersState = {
   loginFailed: boolean;
   logoutRequest: boolean;
   logoutFailed: boolean;
-  userInfo:  IUserInfo | null;
+  userInfo: IUserInfo | null;
   getUserInfoRequest: boolean;
   getUserInfoFailed: boolean;
   sendUserInfoRequest: boolean;
@@ -21,7 +22,7 @@ type UsersState = {
   refreshTokenRequest: boolean;
   refreshTokenFailed: boolean;
 };
-const initialState: UsersState ={
+const initialState: UsersState = {
   registrationRequest: false,
   registrationFailed: false,
 
@@ -48,7 +49,7 @@ const initialState: UsersState ={
 
   refreshTokenRequest: false,
   refreshTokenFailed: false,
-}
+};
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -58,10 +59,10 @@ const usersSlice = createSlice({
       state.registrationRequest = true;
       state.registrationFailed = false;
     },
-    registrationUserSuccess(state, action: PayloadAction<IUserData> ) {
+    registrationUserSuccess(state, action: PayloadAction<IUserData>) {
       state.registrationRequest = false;
       state.token = action.payload.accessToken;
-   },
+    },
     registrationUserFailed(state) {
       state.registrationRequest = false;
       state.registrationFailed = true;
@@ -99,9 +100,9 @@ const usersSlice = createSlice({
       state.refreshTokenRequest = true;
       state.refreshTokenFailed = false;
     },
-    setRefreshTokenSuccess(state, action: PayloadAction<IUserData>) {
+    setRefreshTokenSuccess(state, action: PayloadAction<string>) {
       state.refreshTokenRequest = false;
-      state.token = action.payload.accessToken;
+      state.token = action.payload;
     },
     setRefreshTokenFailed(state) {
       state.refreshTokenRequest = false;
@@ -164,6 +165,16 @@ const usersSlice = createSlice({
 });
 
 export const usersSliceReducer = usersSlice.reducer;
+// export const selectAccessToken = (state: RootState) => {
+//   return state.users.token;
+// };
+export const selectIsForgotPassword = (state: RootState) => {
+  return state.users.isForgotPassword;
+};
+
+export const selectAccessToken = (state: RootState) => {
+  return state.users.token;
+};
 
 export const {
   setForgotPasswordState,

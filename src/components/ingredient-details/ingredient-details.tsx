@@ -1,26 +1,17 @@
-import React ,{FC}from "react";
+import React, { FC } from "react";
 import style from "./ingredient-details.module.css";
-
-import { useSelector } from "react-redux";
 import { useAppSelector } from "../../services/hook";
-import { IIngredient } from "../../utils/types";
-interface IngredientDetailsProps {
-  id: string;
-}
-const IngredientDetails: FC<IngredientDetailsProps> = ({ id }) => {
-  const ingredient = useSelector(
-    (state: { ingredients: { list: IIngredient[] } }) => 
+import { IIngredient, IIngredientDetailsProps } from "../../utils/types";
+
+const IngredientDetails: FC<IIngredientDetailsProps> = ({ id }) => {
+  const ingredient = useAppSelector(
+    (state: { ingredients: { list: IIngredient[] } }) =>
       state.ingredients.list.find(({ _id }) => _id === id)
   );
-
-  // Проверяем, найден ли ингредиент
   if (!ingredient) {
-    return null; // или вы можете вернуть какое-либо уведомление для пользователя
+    return null;
   }
-
   const { name, proteins, fat, carbohydrates, calories, image } = ingredient;
-
-  
 
   return (
     <div className={style.modal}>
