@@ -1,37 +1,42 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
+import { FC } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./burger-ingredients.module.css";
 import BurgerIngredientsList from "../burger-ingridients-list/burger-ingridients-list";
 import { useSelector } from "react-redux";
+import { useAppSelector } from "../../services/hook";
+import { IIngredient } from "../../utils/types";
 
-function BurgerIngredients() {
-  const [current, setCurrent] = React.useState("bun");
 
-  const ingredientsData = useSelector((store) => store.ingredients.list);
+const BurgerIngredients: FC = () => {
+
+  const [current, setCurrent] = useState<"bun" | "main" | "sauce">("bun");
+
+  const ingredientsData = useAppSelector((store) => store.ingredients.list);
 
   const bun = React.useMemo(
-    () => ingredientsData.filter((elem) => elem.type === "bun"),
+    () => ingredientsData.filter((elem: IIngredient) => elem.type === "bun"),
     [ingredientsData]
   );
   const main = React.useMemo(
-    () => ingredientsData.filter((elem) => elem.type === "main"),
+    () => ingredientsData.filter((elem:IIngredient) => elem.type === "main"),
     [ingredientsData]
   );
   const sauce = React.useMemo(
-    () => ingredientsData.filter((elem) => elem.type === "sauce"),
+    () => ingredientsData.filter((elem: IIngredient) => elem.type === "sauce"),
     [ingredientsData]
   );
 
-  const bunRef = useRef();
-  const mainRef = useRef();
-  const sauceRef = useRef();
+  const bunRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
 
-  const scrollInto = (name) => {
-    if (name === "sauce") {
+  const scrollInto = (name:string) => {
+    if (name === "sauce" && sauceRef.current) {
       sauceRef.current.scrollIntoView();
-    } else if (name === "bun") {
+    } else if (name === "bun" && bunRef.current) {
       bunRef.current.scrollIntoView();
-    } else {
+    } else if (mainRef.current) {
       mainRef.current.scrollIntoView();
     }
   };
@@ -65,27 +70,17 @@ function BurgerIngredients() {
       <div
         className={`${style.ingredients}`}
         onScroll={(e) => {
-          if (
-            e.target.scrollTop <
-            mainRef.current.offsetTop - e.target.offsetTop
-          ) {
-            setCurrent("bun");
-          } else if (
-            e.target.scrollTop >
-            sauceRef.current.offsetTop - e.target.offsetTop - 200
-          ) {
-            setCurrent("sauce");
-          } else {
-            setCurrent("main");
-          }
+          const target = e.target as HTMLElement;
 
-          console.log(e.target.scrollTop);
-          console.log(
-            e.target.scrollTop,
-            bunRef.current.offsetTop - e.target.offsetTop,
-            mainRef.current.offsetTop - e.target.offsetTop,
-            sauceRef.current.offsetTop - e.target.offsetTop
-          );
+    
+        if (mainRef.current && target.scrollTop < mainRef.current.offsetTop - target.offsetTop) {
+          setCurrent("bun");
+      } else if (sauceRef.current && target.scrollTop > sauceRef.current.offsetTop - target.offsetTop - 200) {
+          setCurrent("sauce");
+      } else {
+          setCurrent("main");
+      }
+        
         }}
       >
         <BurgerIngredientsList ingredients={bun} title="Булки" elRef={bunRef} />

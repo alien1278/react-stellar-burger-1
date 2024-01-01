@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, FC, ChangeEvent, FormEvent } from "react";
 import {
   Input,
   Button,
@@ -8,24 +8,29 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../services/actions/users";
 import style from "./login.module.css";
+import { useAppDispatch, useAppSelector } from "../../services/hook";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Login: FC = () => {
+  
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const { userInfo } = useSelector((state) => state.users);
+  const { userInfo } = useAppSelector((state) => state.users);
 
-  const inputRef = useRef(null);
+  
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const onChange = (e) => {
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const sendData = (e) => {
+  const sendData = (e: FormEvent) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -54,7 +59,6 @@ const Login = () => {
             value={email}
             error={false}
             ref={inputRef}
-            onIconClick={""}
             errorText={"Ошибка"}
             size={"default"}
             placeholder={"E-mail"}
@@ -69,7 +73,7 @@ const Login = () => {
           />
         </div>
 
-        <Button type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Войти
         </Button>
       </form>

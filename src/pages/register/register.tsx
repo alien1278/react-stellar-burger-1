@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, FC, ChangeEvent, FormEvent } from "react";
 import {
   Input,
   Button,
@@ -8,22 +8,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { register } from "../../services/actions/users";
 import style from "./register.module.css";
+import { useAppDispatch } from "../../services/hook";
 
-const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+const Register: FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const sendData = (e) => {
+  const sendData = (e: FormEvent) => {
     e.preventDefault();
 
     if (!name || !email || !password) {
@@ -45,7 +47,7 @@ const Register = () => {
             value={name}
             error={false}
             ref={inputRef}
-            onIconClick={""}
+            // onIconClick={""}
             errorText={"Ошибка"}
             size={"default"}
             placeholder={"Имя"}
@@ -58,7 +60,7 @@ const Register = () => {
             value={email}
             error={false}
             ref={inputRef}
-            onIconClick={""}
+            // onIconClick={""}
             errorText={"Ошибка"}
             size={"default"}
             placeholder={"E-mail"}
@@ -73,7 +75,7 @@ const Register = () => {
           />
         </div>
 
-        <Button type="primary" size="medium">
+        <Button type="primary" size="medium" htmlType="submit">
           Зарегистрироваться
         </Button>
       </form>

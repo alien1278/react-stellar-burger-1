@@ -1,19 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { IIngredient } from './../utils/types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as generateUniqueId } from "uuid";
-
+type TIngredientsState = {
+  list: IIngredient[],
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean,
+  chosenIngredients: IIngredient[],
+};
+const initialState: TIngredientsState ={
+  list: [],
+  ingredientsRequest: false,
+  ingredientsFailed: false,
+  chosenIngredients: [],
+}
 const newIngredientsSlice = createSlice({
   name: "ingredients",
-  initialState: {
-    list: [],
-    ingredientsRequest: false,
-    ingredientsFailed: false,
-    chosenIngredients: [],
-  },
+  initialState,
   reducers: {
     getIngredientRequest(state) {
       state.ingredientsRequest = true;
     },
-    getIngredientsSuccess(state, action) {
+    getIngredientsSuccess(state, action: PayloadAction<IIngredient[]>) {
       state.ingredientsFailed = false;
       state.ingredientsRequest = false;
       state.list = action.payload;
@@ -23,26 +30,28 @@ const newIngredientsSlice = createSlice({
       state.ingredientsRequest = true;
     },
 
-    sortConstructorIngredients(state, action) {
+    sortConstructorIngredients(state, action: PayloadAction<{ dragIndex: number, hoverIndex: number }>) {
       const dragCard = state.chosenIngredients[action.payload.dragIndex];
       state.chosenIngredients.splice(action.payload.dragIndex, 1);
       state.chosenIngredients.splice(action.payload.hoverIndex, 0, dragCard);
     },
-    deleteIngredient(state, action) {
+    deleteIngredient(state, action: PayloadAction<number>) {
       state.chosenIngredients = state.chosenIngredients.filter(
         (item, index) => index !== action.payload
       );
     },
 
-    addIngredient(state, action) {
-      const targetIngredient = {
-        ...state.list.find(
-          (ingredient) => ingredient._id === action.payload.id
-        ),
+    addIngredient(state, action: PayloadAction<{ id: string }>) {
+      const foundIngredient = state.list.find(
+        (ingredient) => ingredient._id === action.payload.id
+      );
+    
+      if (!foundIngredient) return; 
+    
+      const targetIngredient: IIngredient = {
+        ...foundIngredient,
+        uuid: generateUniqueId()
       };
-
-      targetIngredient.uuid = generateUniqueId();
-
       if (targetIngredient.type === "bun") {
         state.chosenIngredients = state.chosenIngredients.filter(
           ({ type }) => type !== "bun"

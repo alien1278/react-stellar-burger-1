@@ -1,17 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { IOrderPayload } from './../utils/types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+type TOrderState = {
+  createdOrder: IOrderPayload | null;
+  orderFailed: boolean;
+  orderRequest: boolean;
+};
+const initialState: TOrderState = {
+  createdOrder: null,
+  orderFailed: false,
+  orderRequest: false,
+};
 const orderSlice = createSlice({
   name: "order",
-  initialState: {
-    createdOrder: null,
-    orderFailed: false,
-    orderRequest: false,
-  },
+  initialState,
   reducers: {
     getCreatedOrder(state) {
       state.orderRequest = true;
       state.orderFailed = false;
     },
-    getCreatedOrderSuccess(state, action) {
+    getCreatedOrderSuccess(state, action: PayloadAction<IOrderPayload>) {
       state.orderRequest = false;
       state.createdOrder = action.payload;
     },

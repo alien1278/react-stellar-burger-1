@@ -3,7 +3,8 @@ import {
   DragIcon,
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDrag, useDrop } from "react-dnd";
+import { FC } from "react";
+import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { useRef } from "react";
 import PropTypes from "prop-types";
 import {
@@ -11,32 +12,39 @@ import {
   sortConstructorIngredients,
 } from "../../services/ingredientsSlice";
 import style from "../burger-constructor/burger-constructor.module.css";
-import { ingredientType } from "../../utils/types";
+import { IDragItem, IIngredient } from "../../utils/types";
+import { useAppDispatch, useAppSelector } from "../../services/hook";
+//import { ingredientType } from "../../utils/types";
+interface IConstructorElementsProps {
+  ingredient: IIngredient;
+  id: string;
+  index: number;
+}
 
-function ConstructorElements({ ingredient, id, index }) {
+const  ConstructorElements:FC<IConstructorElementsProps> = ({ ingredient, id, index }) => {
   const { name, price, image } = ingredient;
 
-  const { chosenIngredients } = useSelector((state) => state.ingredients);
+  const { chosenIngredients } = useAppSelector((state) => state.ingredients);
 
-  const dispatch = useDispatch();
-  const ref = useRef(null);
+  const dispatch = useAppDispatch();
+  const ref = useRef<HTMLDivElement>(null);
 
-  const onClose = (elem) => {
+
+  const onClose = (elem: IIngredient) => {
     const del = chosenIngredients.indexOf(elem);
     dispatch(deleteIngredient(del));
   };
 
-  const moveCard = (dragIndex, hoverIndex) => {
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
     dispatch(sortConstructorIngredients({ dragIndex, hoverIndex }));
   };
 
   const [, drop] = useDrop({
     accept: "card",
-    hover: (item, monitor) => {
+    hover: (item:IDragItem, monitor:DropTargetMonitor) => {
       if (!ref.current) {
         return;
       }
-
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) {
@@ -47,6 +55,10 @@ function ConstructorElements({ ingredient, id, index }) {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
+
+if (!clientOffset) {
+    return;
+}
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
@@ -75,23 +87,23 @@ function ConstructorElements({ ingredient, id, index }) {
 
   return (
     <div ref={ref} className={`${style.element}`}>
-      <DragIcon />
+      <DragIcon  type="primary" />
       <div className={style.constructorElement}>
         <ConstructorElement
           text={name}
           price={price}
           thumbnail={image}
-          handleClose={(e) => onClose(ingredient)}
+          handleClose={() => onClose(ingredient)}
         />
       </div>
     </div>
   );
 }
 
-ConstructorElements.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientType),
-  id: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-};
+// ConstructorElements.propTypes = {
+//   ingredients: PropTypes.arrayOf(ingredientType),
+//   id: PropTypes.string.isRequired,
+//   index: PropTypes.number.isRequired,
+// };
 
 export default ConstructorElements;

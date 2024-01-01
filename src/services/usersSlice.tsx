@@ -1,45 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import { IUserData, IUserInfo } from "../utils/types";
+type UsersState = {
+  registrationRequest: boolean;
+  registrationFailed: boolean;
+  token: string | null;
+  forgotPasswordRequest: boolean;
+  forgotPasswordFailed: boolean;
+  isForgotPassword: boolean;
+  resetPasswordRequest: boolean;
+  resetPasswordFailed: boolean;
+  loginRequest: boolean;
+  loginFailed: boolean;
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+  userInfo:  IUserInfo | null;
+  getUserInfoRequest: boolean;
+  getUserInfoFailed: boolean;
+  sendUserInfoRequest: boolean;
+  sendUserInfoFailed: boolean;
+  refreshTokenRequest: boolean;
+  refreshTokenFailed: boolean;
+};
+const initialState: UsersState ={
+  registrationRequest: false,
+  registrationFailed: false,
 
+  token: null,
+
+  forgotPasswordRequest: false,
+  forgotPasswordFailed: false,
+  isForgotPassword: false,
+
+  resetPasswordRequest: false,
+  resetPasswordFailed: false,
+
+  loginRequest: false,
+  loginFailed: false,
+
+  logoutRequest: false,
+  logoutFailed: false,
+
+  userInfo: null,
+  getUserInfoRequest: false,
+  getUserInfoFailed: false,
+  sendUserInfoRequest: false,
+  sendUserInfoFailed: false,
+
+  refreshTokenRequest: false,
+  refreshTokenFailed: false,
+}
 const usersSlice = createSlice({
   name: "users",
-  initialState: {
-    registrationRequest: false,
-    registrationFailed: false,
-
-    token: null,
-
-    forgotPasswordRequest: false,
-    forgotPasswordFailed: false,
-    isForgotPassword: false,
-
-    resetPasswordRequest: false,
-    resetPasswordFailed: false,
-
-    loginRequest: false,
-    loginFailed: false,
-
-    logoutRequest: false,
-    logoutFailed: false,
-
-    userInfo: null,
-    getUserInfoRequest: false,
-    getUserInfoFailed: false,
-    sendUserInfoRequest: false,
-    sendUserInfoFailed: false,
-
-    refreshTokenRequest: false,
-    refreshTokenFailed: false,
-  },
+  initialState,
   reducers: {
     //registration
     registrationUser(state) {
       state.registrationRequest = true;
       state.registrationFailed = false;
     },
-    registrationUserSuccess(state, action) {
+    registrationUserSuccess(state, action: PayloadAction<IUserData> ) {
       state.registrationRequest = false;
-      state.token = action.payload;
-    },
+      state.token = action.payload.accessToken;
+   },
     registrationUserFailed(state) {
       state.registrationRequest = false;
       state.registrationFailed = true;
@@ -49,7 +71,7 @@ const usersSlice = createSlice({
       state.loginRequest = true;
       state.loginFailed = false;
     },
-    setLoginSuccess(state, action) {
+    setLoginSuccess(state, action: PayloadAction<IUserData>) {
       state.loginRequest = false;
       state.token = action.payload.accessToken;
       state.userInfo = action.payload.user;
@@ -77,9 +99,9 @@ const usersSlice = createSlice({
       state.refreshTokenRequest = true;
       state.refreshTokenFailed = false;
     },
-    setRefreshTokenSuccess(state, action) {
+    setRefreshTokenSuccess(state, action: PayloadAction<IUserData>) {
       state.refreshTokenRequest = false;
-      state.token = action.payload;
+      state.token = action.payload.accessToken;
     },
     setRefreshTokenFailed(state) {
       state.refreshTokenRequest = false;
@@ -90,7 +112,7 @@ const usersSlice = createSlice({
       state.getUserInfoRequest = true;
       state.getUserInfoFailed = false;
     },
-    setGetUserInfoSuccess(state, action) {
+    setGetUserInfoSuccess(state, action: PayloadAction<IUserInfo>) {
       state.getUserInfoRequest = false;
       state.userInfo = action.payload;
     },
@@ -103,15 +125,15 @@ const usersSlice = createSlice({
       state.sendUserInfoRequest = true;
       state.sendUserInfoFailed = false;
     },
-    sendUserInfoSuccess(state, action) {
-      state.state.sendUserInfoRequest = false;
+    sendUserInfoSuccess(state, action: PayloadAction<IUserInfo>) {
+      state.sendUserInfoRequest = false;
       state.userInfo = action.payload;
     },
     sendUserInfoFailed(state) {
       state.sendUserInfoRequest = false;
       state.sendUserInfoFailed = true;
     },
-    setForgotPasswordState(state, action) {
+    setForgotPasswordState(state, action: PayloadAction<boolean>) {
       state.isForgotPassword = action.payload;
     },
     //ForgotPassword

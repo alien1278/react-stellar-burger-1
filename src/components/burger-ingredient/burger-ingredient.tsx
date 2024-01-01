@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FC } from "react";
 import style from "./burger-ingredient.module.css";
 import {
   CurrencyIcon,
@@ -9,13 +10,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "../../services/modalSlice";
 import { useDrag } from "react-dnd";
 import { Link } from "react-router-dom";
+import { IIngredient } from "../../utils/types";
+import { useAppDispatch, useAppSelector } from "../../services/hook";
 
-const BurgerIngredient = ({ ingredient }) => {
+
+interface IBurgerIngredientProps {
+  ingredient: IIngredient;
+}
+
+
+
+const BurgerIngredient: FC<IBurgerIngredientProps> = ({ ingredient }) => {
   const { name, price, image, _id } = ingredient;
 
-  const { chosenIngredients } = useSelector((state) => state.ingredients);
+  const { chosenIngredients } = useAppSelector((state ) => state.ingredients);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [{ isDrag }, dragRef] = useDrag({
     type: "ingredient",
     item: { _id },
@@ -27,9 +37,9 @@ const BurgerIngredient = ({ ingredient }) => {
   let counter = 0;
 
   chosenIngredients.forEach(
-    (ingredient) =>
-      ingredient.name === name &&
-      (ingredient.type === "bun" ? (counter += 2) : (counter += 1))
+    (currentIngredient: IIngredient) =>
+    currentIngredient.name === name &&
+      (currentIngredient.type === "bun" ? (counter += 2) : (counter += 1))
   );
 
   return (
@@ -51,16 +61,6 @@ const BurgerIngredient = ({ ingredient }) => {
       </div>
     </Link>
   );
-};
-
-BurgerIngredient.propTypes = {
-  ingredientsData: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-    })
-  ),
 };
 
 export default BurgerIngredient;
