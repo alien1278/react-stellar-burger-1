@@ -1,0 +1,15 @@
+.list {
+  max-height: 900px;
+  padding-left: 0;
+  min-width: 580px;
+  overflow: auto;
+  scrollbar-width: thin;
+  box-sizing: border-box;
+}
+.list::-webkit-scrollbar {
+  width: 8px;
+  background: var(--input-color);
+}
+.list::-webkit-scrollbar-thumb {
+  background: var(--text-dark-grey);
+}
