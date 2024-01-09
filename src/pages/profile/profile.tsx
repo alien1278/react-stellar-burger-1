@@ -4,6 +4,7 @@ import {
   Route,
   useNavigate,
   useParams,
+  useLocation,
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../services/actions/users";
@@ -19,8 +20,9 @@ interface NavParams {
 }
 const Profile: FC = () => {
   const dispatch = useAppDispatch();
-  const navParams: NavParams = useParams();
   const navigate = useNavigate();
+
+  let { state } = useLocation();
 
   const handleLogout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -75,15 +77,22 @@ const Profile: FC = () => {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </nav>
-      {navParams && navParams.id && (
-        <Modal title="" onClose={() => navigate("/profile/orders")}>
-          <FeedId />
-        </Modal>
-      )}
+
+      <Routes>
+        <Route
+          path="/orders/:id"
+          element={
+            <Modal title="" onClose={() => navigate("/profile/orders")}>
+              <FeedId authed />
+            </Modal>
+          }
+        />
+      </Routes>
+
       <div className="content">
         <Routes>
+          <Route path="/orders/*" element={<OrdersFeedHistory />} />
           <Route index element={<ProfileInfo />} />
-          <Route path="/orders" element={<OrdersFeedHistory />} />
         </Routes>
       </div>
     </div>

@@ -33,17 +33,40 @@ const BurgerOrderRoute: FC = () => {
 
   return state?.showModal ? <OrdersFeed /> : <FeedId />;
 };
-const BurgerMyOrderRoute: FC = () => {
+
+const AppRoutes = () => {
   let { state } = useLocation();
 
-  return state?.showModal ? (
-    <Profile>
-      <OrdersFeedHistory />
-    </Profile>
-  ) : (
-    <FeedId authed />
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/ingredients/:id" element={<BurgerIngredientRoute />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="feed" element={<OrdersFeed />} />
+        <Route path="feed/:id" element={<BurgerOrderRoute />} />
+
+        {!state?.showModal && (
+          <Route path="profile/orders/:id" element={<FeedId authed />} />
+        )}
+
+        <Route
+          path="profile/*"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<NotFound404 />} />
+      </Routes>
+    </>
   );
 };
+
 const App: FC = () => {
   const dispatch = useAppDispatch();
 
@@ -74,26 +97,7 @@ const App: FC = () => {
             <AppHeader />
           </div>
         </div>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/ingredients/:id" element={<BurgerIngredientRoute />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="feed" element={<OrdersFeed />} />
-          <Route path="feed/:id" element={<BurgerOrderRoute />} />
-          <Route
-            path="profile/*"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="profile/orders/:id" element={<BurgerMyOrderRoute />} />
-          <Route path="*" element={<NotFound404 />} />
-        </Routes>
+        <AppRoutes />
       </Router>
     </>
   );

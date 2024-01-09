@@ -1,19 +1,13 @@
-import React, { FC, useEffect, useMemo } from "react";
+import React, { FC, useEffect } from "react";
 import styles from "./feed-id.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams } from "react-router-dom";
 //import { useAppDispatch, useAppSelector } from "../../hook/hook";
 import IngredientImage from "../../components/ingredient-image/ingredient-image";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
-import {
-  onClose,
-  selectOrders,
-  wsInit,
-  wsInitAuthed,
-} from "../../services/ws-orderSlice";
+import { selectOrders, wsClose, wsInit } from "../../services/ws-orderSlice";
 import { formatDate } from "../../utils/constants";
 import { useOrderIngredients } from "../../services/hooks/useOrderIngredients";
-import { IIngredient } from "../../utils/types";
 //import { useOrderIngredients } from "../../services/hooks/useOrderIngredients";
 
 export enum OrderReadyStatus {
@@ -38,10 +32,21 @@ const FeedId: FC<{ authed?: boolean }> = ({ authed }) => {
   useEffect(() => {
     if (authed) {
       if (!token) return;
-      dispatch(wsInitAuthed(token.replace("Bearer ", "")));
+      dispatch(
+        wsInit(
+          `wss://norma.nomoreparties.space/orders?token=${token.replace(
+            "Bearer ",
+            ""
+          )}`
+        )
+      );
     } else {
-      dispatch(wsInit());
+      dispatch(wsInit("wss://norma.nomoreparties.space/orders/all"));
     }
+
+    return () => {
+      dispatch(wsClose());
+    };
   }, [authed, dispatch, token]);
 
   if (!orderIngredients || !ordersFromSockets) {

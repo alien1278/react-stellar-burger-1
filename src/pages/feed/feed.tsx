@@ -2,9 +2,9 @@ import styles from "./feed.module.css";
 import { FC, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
 import {
-  onClose,
   selectOrders,
   selectStats,
+  wsClose,
   wsInit,
 } from "../../services/ws-orderSlice";
 import Orders from "../../components/orders/orders";
@@ -23,10 +23,10 @@ const OrdersFeed: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(wsInit());
-    // return () => {
-    //   dispatch(onClose());
-    // };
+    dispatch(wsInit("wss://norma.nomoreparties.space/orders/all"));
+    return () => {
+      dispatch(wsClose());
+    };
   }, [dispatch]);
 
   if (!stats) {

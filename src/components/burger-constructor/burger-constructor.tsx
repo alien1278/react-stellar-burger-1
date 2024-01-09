@@ -5,9 +5,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./burger-constructor.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { DndProvider, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrop } from "react-dnd";
 import {
   addIngredient,
   clearIngredients,
@@ -67,71 +65,69 @@ const BurgerConstructor: FC = () => {
     }
   };
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className={`${style.content} mt-25 ml-4 mr-4`} ref={dropRef}>
-        <div className={`${style.constructor} `}>
-          <div className={`${style.topElement} ml-8 mr-4`}>
-            {isBun && (
-              <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={bunHandler(
-                  chosenIngredients,
-                  "name",
-                  "(верх)",
-                  "Выберите булку"
-                )}
-                price={+bunHandler(chosenIngredients, "price", "", "0")}
-                thumbnail={bunHandler(chosenIngredients, "image", "", "")}
-              />
-            )}
-          </div>
-          <div className={`${style.elements} mt-4 mb-4 `}>
-            {chosenIngredients.map(
-              (item, index) =>
-                item.type !== "bun" && (
-                  <ConstructorElements
-                    key={item.uuid}
-                    index={index}
-                    ingredient={item}
-                    id={`${item._id}${index}`}
-                  />
-                )
-            )}
-          </div>
-          <div className={`${style.bottomElement} ml-8 mr-4`}>
-            {isBun && (
-              <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={bunHandler(
-                  chosenIngredients,
-                  "name",
-                  "(низ)",
-                  "Выберите булку"
-                )}
-                price={+bunHandler(chosenIngredients, "price", "", "0")}
-                thumbnail={bunHandler(chosenIngredients, "image", "", "")}
-              />
-            )}
-          </div>
+    <div className={`${style.content} mt-25 ml-4 mr-4`} ref={dropRef}>
+      <div className={`${style.constructor} `}>
+        <div className={`${style.topElement} ml-8 mr-4`}>
+          {isBun && (
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={bunHandler(
+                chosenIngredients,
+                "name",
+                "(верх)",
+                "Выберите булку"
+              )}
+              price={+bunHandler(chosenIngredients, "price", "", "0")}
+              thumbnail={bunHandler(chosenIngredients, "image", "", "")}
+            />
+          )}
         </div>
-        <div className={`${style.info} mt-10 mb-10 mr-4`}>
-          <div className={`${style.price} mr-10`}>
-            <p className="text text_type_digits-medium mr-2">{sum}</p>
-            <CurrencyIcon type="primary" />
-          </div>
-          <Button
-            type="primary"
-            size="medium"
-            onClick={openOrderDetails}
-            htmlType="submit"
-          >
-            Оформить заказ
-          </Button>
+        <div className={`${style.elements} mt-4 mb-4 `}>
+          {chosenIngredients.map(
+            (item, index) =>
+              item.type !== "bun" && (
+                <ConstructorElements
+                  key={item.uuid}
+                  index={index}
+                  ingredient={item}
+                  id={`${item._id}${index}`}
+                />
+              )
+          )}
+        </div>
+        <div className={`${style.bottomElement} ml-8 mr-4`}>
+          {isBun && (
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={bunHandler(
+                chosenIngredients,
+                "name",
+                "(низ)",
+                "Выберите булку"
+              )}
+              price={+bunHandler(chosenIngredients, "price", "", "0")}
+              thumbnail={bunHandler(chosenIngredients, "image", "", "")}
+            />
+          )}
         </div>
       </div>
-    </DndProvider>
+      <div className={`${style.info} mt-10 mb-10 mr-4`}>
+        <div className={`${style.price} mr-10`}>
+          <p className="text text_type_digits-medium mr-2">{sum}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <Button
+          type="primary"
+          size="medium"
+          onClick={openOrderDetails}
+          htmlType="submit"
+        >
+          Оформить заказ
+        </Button>
+      </div>
+    </div>
   );
 };
 

@@ -4,9 +4,8 @@ import { useAppSelector } from "../../services/hook";
 import { IIngredient, IIngredientDetailsProps } from "../../utils/types";
 
 const IngredientDetails: FC<IIngredientDetailsProps> = ({ id }) => {
-  const ingredient = useAppSelector(
-    (state: { ingredients: { list: IIngredient[] } }) =>
-      state.ingredients.list.find(({ _id }) => _id === id)
+  const ingredient = useAppSelector((state) =>
+    state.ingredients.list.find(({ _id }) => _id === id)
   );
   if (!ingredient) {
     return null;

@@ -5,6 +5,15 @@ import { orderSliceReducer } from "./orderSlice";
 import { usersSliceReducer } from "./usersSlice";
 import { wsOrdersSliceReducer } from "./ws-orderSlice";
 import { socketMiddleware } from "../middleware/socket-middleware";
+import {
+  onClose,
+  onError,
+  onMessage,
+  onOpen,
+  sendMessage,
+  wsClose,
+  wsInit,
+} from "./ws-orderSlice";
 
 const rootReducer = combineReducers({
   ingredients: newIngredientsSliceReducer,
@@ -17,7 +26,17 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(socketMiddleware()),
+    getDefaultMiddleware().concat(
+      socketMiddleware({
+        onClose,
+        onError,
+        onMessage,
+        onOpen,
+        sendMessage,
+        wsClose,
+        wsInit,
+      })
+    ),
   devTools: true,
 });
 

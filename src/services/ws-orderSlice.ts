@@ -39,11 +39,11 @@ const wsOrdersSlice = createSlice({
     onClose: (state) => {
       return { ...state, isConnected: false };
     },
-    wsInit: (state) => {
+    wsInit: (state, action: PayloadAction<string>) => {
       return state;
     },
-    wsInitAuthed: (state, action: PayloadAction<string>) => {
-      return state;
+    wsClose: (state) => {
+      return { ...state, isConnected: false };
     },
     sendMessage: (state, action: PayloadAction<any>) => {
       return state;
@@ -58,7 +58,7 @@ export const {
   onOpen,
   onError,
   wsInit,
-  wsInitAuthed,
+  wsClose,
   sendMessage,
 } = wsOrdersSlice.actions;
 

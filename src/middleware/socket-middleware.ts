@@ -1,49 +1,36 @@
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { Middleware, AnyAction, MiddlewareAPI } from "redux";
-import { AppDispatch, RootState } from "../services/store";
-import {
-  onClose,
-  onError,
-  onMessage,
-  onOpen,
-  sendMessage,
-  wsInit,
-  wsInitAuthed,
-} from "../services/ws-orderSlice";
 
-export const socketMiddleware = (): Middleware => {
-  return (store: MiddlewareAPI<AppDispatch, RootState>) => {
+export type SocketActions = {
+  wsInit: ActionCreatorWithPayload<string, string>;
+  sendMessage: ActionCreatorWithPayload<any, string>;
+  onOpen: ActionCreatorWithPayload<void, string>;
+  onError: ActionCreatorWithPayload<void, string>;
+  onMessage: ActionCreatorWithPayload<any, string>;
+  onClose: ActionCreatorWithPayload<void, string>;
+  wsClose: ActionCreatorWithPayload<void, string>;
+};
+
+export const socketMiddleware = (actions: SocketActions): Middleware => {
+  return (store: MiddlewareAPI) => {
     let socket: WebSocket | null = null;
-    let socketParams: string | null = null;
+    let currentUrl: string;
 
     return (next) => (action: AnyAction) => {
-      // console.log(store.getState());
       const { dispatch } = store;
 
-      if (wsInit.match(action)) {
-        if (!socket || (socket && socketParams !== "empty")) {
-          socket?.close();
-          socket = new WebSocket("wss://norma.nomoreparties.space/orders/all");
-          socketParams = "empty";
-        }
-      }
+      if (actions.wsInit.match(action)) {
+        if (currentUrl === action.payload) return;
+        currentUrl = action.payload;
 
-      if (wsInitAuthed.match(action)) {
-        if (!socket || (socket && socketParams !== action.payload)) {
-          socket?.close();
-          socket = new WebSocket(
-            `wss://norma.nomoreparties.space/orders?token=${action.payload}`
-          );
-          socketParams = action.payload;
-        }
-      }
+        socket = new WebSocket(action.payload);
 
-      if (socket) {
         socket.onopen = () => {
-          dispatch(onOpen());
+          dispatch(actions.onOpen());
         };
 
         socket.onerror = () => {
-          dispatch(onError());
+          dispatch(actions.onError());
         };
 
         socket.onmessage = (event) => {
@@ -51,21 +38,23 @@ export const socketMiddleware = (): Middleware => {
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
 
-          dispatch(onMessage(restParsedData));
+          dispatch(actions.onMessage(restParsedData));
         };
 
         let currentSocket = socket;
         socket.onclose = () => {
           if (socket === currentSocket) {
             socket = null;
-            socketParams = null;
-            dispatch(onClose());
+            dispatch(actions.onClose());
           }
         };
+      } else if (actions.sendMessage.match(action)) {
+        if (!socket) throw new Error("Socket not found");
 
-        if (sendMessage.match(action)) {
-          socket.send(JSON.stringify(action.payload));
-        }
+        socket.send(JSON.stringify(action.payload));
+      } else if (actions.wsClose.match(action)) {
+        socket?.close();
+        socket = null;
       }
 
       next(action);
