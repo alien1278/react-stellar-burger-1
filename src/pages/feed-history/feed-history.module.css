@@ -1,0 +1,16 @@
+.root {
+  width: 100%;
+  min-width: 870px;
+}
+
+.list {
+  margin: 0;
+  list-style: none;
+  max-height: 870px;
+  overflow-y: scroll;
+}
+
+.history {
+  display: flex;
+  max-width: 1280px;
+}

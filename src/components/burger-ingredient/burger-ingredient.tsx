@@ -13,17 +13,14 @@ import { Link } from "react-router-dom";
 import { IIngredient } from "../../utils/types";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
 
-
 interface IBurgerIngredientProps {
   ingredient: IIngredient;
 }
 
-
-
 const BurgerIngredient: FC<IBurgerIngredientProps> = ({ ingredient }) => {
   const { name, price, image, _id } = ingredient;
 
-  const { chosenIngredients } = useAppSelector((state ) => state.ingredients);
+  const { chosenIngredients } = useAppSelector((state) => state.ingredients);
 
   const dispatch = useAppDispatch();
   const [{ isDrag }, dragRef] = useDrag({
@@ -38,8 +35,7 @@ const BurgerIngredient: FC<IBurgerIngredientProps> = ({ ingredient }) => {
 
   chosenIngredients.forEach(
     (currentIngredient: IIngredient) =>
-    currentIngredient.name === name &&
-      (currentIngredient.type === "bun" ? (counter += 2) : (counter += 1))
+      currentIngredient.name === name && (counter += 1)
   );
 
   return (

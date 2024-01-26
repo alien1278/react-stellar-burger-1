@@ -1,17 +1,3 @@
-// import PropTypes from "prop-types";
-
-// export const ingredientType = PropTypes.shape({
-//   _id: PropTypes.string.isRequired,
-//   name: PropTypes.string.isRequired,
-//   type: PropTypes.string.isRequired,
-//   proteins: PropTypes.number.isRequired,
-//   fat: PropTypes.number.isRequired,
-//   carbohydrates: PropTypes.number.isRequired,
-//   calories: PropTypes.number.isRequired,
-//   price: PropTypes.number.isRequired,
-//   image: PropTypes.string.isRequired,
-// });
-
 export interface IIngredient {
   _id: string;
   name: string;
@@ -23,6 +9,7 @@ export interface IIngredient {
   price: number;
   image: string;
   uuid?: string;
+  count?: number;
 }
 
 export interface IUserInfo {
@@ -46,13 +33,26 @@ export interface IModalProps {
   onClose: () => void;
 }
 
-// export interface IOrderPayload {
-//   order: {
-//     number: number
-//   }
-// }
 export interface IOrderPayload {
   name: string;
   order: { number: number };
   success: boolean;
 }
+export interface IResponse {
+  ok: boolean;
+  status: number;
+  json: () => Promise<any>;
+}
+
+export interface IIngredientDetailsProps {
+  id: string;
+}
+export type TOrder = {
+  _id: string;
+  status: string | "pending" | "done";
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+  ingredients: string[];
+};

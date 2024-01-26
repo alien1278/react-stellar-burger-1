@@ -1,3 +1,4 @@
+import { AppDispatch } from '../store';
 import { getIngredientsRequest } from "../../utils/api";
 import {
   getIngredientRequest,
@@ -6,7 +7,7 @@ import {
 } from "../ingredientsSlice";
 
 export function getIngredients() {
-  return function (dispatch) {
+  return function (dispatch: AppDispatch) {
     dispatch(getIngredientRequest());
     return getIngredientsRequest()
       .then((res) => {

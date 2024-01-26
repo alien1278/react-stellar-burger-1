@@ -4,11 +4,14 @@
   max-width: 1240px;
   padding-top: 180px;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+  margin: 0 auto;
 }
-
+.content {
+}
 .navigation {
   margin-right: 60px;
+  align-self: flex-start;
 }
 
 .items {

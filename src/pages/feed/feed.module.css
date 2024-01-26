@@ -1,0 +1,20 @@
+.feed {
+  display: grid;
+  grid-template-areas:
+    "a a"
+    "b c";
+  justify-content: center;
+  column-gap: 60px;
+  row-gap: 20px;
+  margin-top: 40px;
+}
+.title {
+  grid-area: a;
+}
+.orders {
+  grid-area: b;
+  max-width: 890px;
+}
+.stats {
+  grid-area: c;
+}

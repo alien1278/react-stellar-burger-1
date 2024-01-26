@@ -1,3 +1,4 @@
+import { IIngredient } from "./types";
 import {
   request,
   INGREDIENTS_URL,
@@ -9,15 +10,20 @@ import {
   REGISTER_URL,
   TOKEN_URL,
   LOGOUT_URL,
+  ORDERS_ALL_URL,
 } from "./api-constants";
 
 export const getIngredientsRequest = () => request(INGREDIENTS_URL, {});
 
-export const createOrderRequest = (ingredients) => {
+export const createOrderRequest = (
+  ingredients: IIngredient[],
+  token: string
+) => {
   return request(ORDERS_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: token,
     },
     body: JSON.stringify({
       ingredients,
@@ -25,7 +31,7 @@ export const createOrderRequest = (ingredients) => {
   });
 };
 
-export const sendEmailRequest = (email) => {
+export const sendEmailRequest = (email: string) => {
   return request(PASSWORD_RESET_URL, {
     method: "POST",
     headers: {
@@ -37,7 +43,7 @@ export const sendEmailRequest = (email) => {
   });
 };
 
-export const resetPasswordRequest = (password, code) => {
+export const resetPasswordRequest = (password: string, code: string) => {
   return request(PASSWORD_RESET_RESET_URL, {
     method: "POST",
     headers: {
@@ -50,7 +56,7 @@ export const resetPasswordRequest = (password, code) => {
   });
 };
 
-export const loginRequest = (email, password) => {
+export const loginRequest = (email: string, password: string) => {
   return request(LOGIN_URL, {
     method: "POST",
     headers: {
@@ -63,7 +69,11 @@ export const loginRequest = (email, password) => {
   });
 };
 
-export const registerRequest = (email, name, password) => {
+export const registerRequest = (
+  email: string,
+  name: string,
+  password: string
+) => {
   return request(REGISTER_URL, {
     method: "POST",
     headers: {
@@ -77,7 +87,7 @@ export const registerRequest = (email, name, password) => {
   });
 };
 
-export const getUserDataRequest = (token) => {
+export const getUserDataRequest = (token: string) => {
   return request(USER_URL, {
     method: "GET",
     headers: {
@@ -86,7 +96,12 @@ export const getUserDataRequest = (token) => {
     },
   });
 };
-export const sendUserInfoRequest = (token, name, email, password) => {
+export const sendUserInfoRequest = (
+  token: string,
+  name: string,
+  email: string,
+  password: string
+) => {
   return request(USER_URL, {
     method: "PATCH",
     headers: {
@@ -100,7 +115,7 @@ export const sendUserInfoRequest = (token, name, email, password) => {
     }),
   });
 };
-export const refreshTokenRequest = (refreshToken) => {
+export const refreshTokenRequest = (refreshToken: string) => {
   return request(TOKEN_URL, {
     method: "POST",
     headers: {
@@ -111,7 +126,7 @@ export const refreshTokenRequest = (refreshToken) => {
     }),
   });
 };
-export const logoutRequest = (refreshToken) => {
+export const logoutRequest = (refreshToken: string) => {
   return request(LOGOUT_URL, {
     method: "POST",
     headers: {
@@ -120,5 +135,15 @@ export const logoutRequest = (refreshToken) => {
     body: JSON.stringify({
       token: refreshToken,
     }),
+  });
+};
+
+export const ordersRequest = (token?: string) => {
+  return request(ORDERS_ALL_URL, {
+    method: "GET", // или другой метод, если необходимо
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
   });
 };

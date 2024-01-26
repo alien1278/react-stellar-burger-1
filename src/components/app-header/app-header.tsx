@@ -25,14 +25,14 @@ const AppHeader: FC = () => {
             <p className={style.text}>Конструктор</p>
           </NavLink>
           <NavLink
-            to="/order"
+            to="/feed"
             className={({ isActive }) =>
               isActive
                 ? `${style.link} p-5`
                 : `${style.link_inactive} ${style.link} p-5`
             }
           >
-            <BurgerIcon type="secondary" />
+            <ListIcon type="secondary" />
             <p className={style.text}>Лента заказов</p>
           </NavLink>
         </div>
@@ -49,6 +49,6 @@ const AppHeader: FC = () => {
       </nav>
     </header>
   );
-}
+};
 
 export default AppHeader;

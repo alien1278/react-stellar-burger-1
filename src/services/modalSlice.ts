@@ -1,14 +1,15 @@
-import { IIngredient } from './../utils/types';
+import { IIngredient } from "./../utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 type TModalState = {
-  name: string | undefined;  // order, details, or undefined
+  name: string | undefined; // order, details, or undefined
   data?: IIngredient | any | undefined; // Adjust "any" if there are specific types you're expecting
 };
 
-const initialState: TModalState ={
+const initialState: TModalState = {
   name: undefined, // order or details
-  data: undefined, 
-}
+  data: undefined,
+};
 const modalSlice = createSlice({
   name: "modal",
   initialState,
