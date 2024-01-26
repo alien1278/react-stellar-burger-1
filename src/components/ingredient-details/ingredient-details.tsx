@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import style from "./ingredient-details.module.css";
 import { useAppSelector } from "../../services/hook";
-import { IIngredient, IIngredientDetailsProps } from "../../utils/types";
+import { IIngredientDetailsProps } from "../../utils/types";
 
 const IngredientDetails: FC<IIngredientDetailsProps> = ({ id }) => {
   const ingredient = useAppSelector((state) =>

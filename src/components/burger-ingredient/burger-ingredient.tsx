@@ -1,17 +1,13 @@
-import React, { useState } from "react";
 import { FC } from "react";
 import style from "./burger-ingredient.module.css";
 import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { showModal } from "../../services/modalSlice";
 import { useDrag } from "react-dnd";
 import { Link } from "react-router-dom";
 import { IIngredient } from "../../utils/types";
-import { useAppDispatch, useAppSelector } from "../../services/hook";
+import { useAppSelector } from "../../services/hook";
 
 interface IBurgerIngredientProps {
   ingredient: IIngredient;
@@ -22,7 +18,6 @@ const BurgerIngredient: FC<IBurgerIngredientProps> = ({ ingredient }) => {
 
   const { chosenIngredients } = useAppSelector((state) => state.ingredients);
 
-  const dispatch = useAppDispatch();
   const [{ isDrag }, dragRef] = useDrag({
     type: "ingredient",
     item: { _id },

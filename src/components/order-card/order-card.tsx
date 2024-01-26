@@ -24,39 +24,17 @@ const OrderCard = ({ data }: IFeedCardProps) => {
   const navParams: NavParams = useParams();
   const navigate = useNavigate();
 
-  // const { list } = useAppSelector((state) => state.ingredients);
-
-  // const orderIngredients = data.ingredients.map((ingredientId) => {
-  //   const ingredientDetails = list.find((item) => item._id === ingredientId);
-  //   return { ...ingredientDetails };
-  // });
-  // // const sum = useMemo(
-  // //   () => orderIngredients.reduce((acc, { price }) => acc + price, 0),
-  // //   [orderIngredients]
-  // // );
-  // const sum = useMemo(
-  //   () =>
-  //     orderIngredients?.reduce((acc, cur) => {
-  //       const price = cur.price ?? 0;
-  //       // console.log(price);
-  //       return acc + price;
-  //     }, 0),
-  //   [orderIngredients]
-  // );
   const { orderIngredients, sum } = useOrderIngredients(data);
 
-  // const { orderIngredients, sum } = useOrderIngredients();
   if (!orderIngredients) {
     return null;
   }
 
-  //console.log(orderIngredients);
   return (
     <li className={styles.cardContainer}>
       <NavLink
         className={styles.card}
         to={`${data.number}`}
-        // state={{ background: location }}
         state={{ showModal: true }}
       >
         <p className={`${styles.header} text text_type_digits-default`}>
@@ -93,15 +71,7 @@ const OrderCard = ({ data }: IFeedCardProps) => {
             <CurrencyIcon type="primary" />
           </p>
         </div>
-        {/* {console.log("navParams", navParams)}
-        {console.log("navParams.id", navParams.id)}
-        */}
       </NavLink>
-      {/* {navParams && navParams.id && (
-        <Modal title="" onClose={() => navigate("/feed")}>
-          <FeedId />
-        </Modal>
-      )} */}
     </li>
   );
 };

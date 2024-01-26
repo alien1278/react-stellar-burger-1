@@ -24,18 +24,18 @@ import FeedId from "../../pages/feed-id/feed-id";
 import OrdersFeedHistory from "../../pages/feed-history/feed-history";
 
 const BurgerIngredientRoute: FC = () => {
-  let { state } = useLocation();
+  const { state } = useLocation();
 
   return state?.showModal ? <Main /> : <IngredientsPage />;
 };
 const BurgerOrderRoute: FC = () => {
-  let { state } = useLocation();
+  const { state } = useLocation();
 
   return state?.showModal ? <OrdersFeed /> : <FeedId />;
 };
 
 const AppRoutes = () => {
-  let { state } = useLocation();
+  const { state } = useLocation();
 
   return (
     <>
@@ -43,18 +43,18 @@ const AppRoutes = () => {
         <Route path="/" element={<Main />} />
         <Route path="/ingredients/:id" element={<BurgerIngredientRoute />} />
         <Route path="/login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="forgot-password" element={<ForgotPassword />} />
-        <Route path="reset-password" element={<ResetPassword />} />
-        <Route path="feed" element={<OrdersFeed />} />
-        <Route path="feed/:id" element={<BurgerOrderRoute />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/feed" element={<OrdersFeed />} />
+        <Route path="/feed/:id" element={<BurgerOrderRoute />} />
 
         {!state?.showModal && (
-          <Route path="profile/orders/:id" element={<FeedId authed />} />
+          <Route path="/profile/orders/:id" element={<FeedId authed />} />
         )}
 
         <Route
-          path="profile/*"
+          path="/profile/*"
           element={
             <ProtectedRoute>
               <Profile />
@@ -91,7 +91,7 @@ const App: FC = () => {
 
   return (
     <>
-      <Router>
+      <Router basename="react-stellar-burger-1">
         <div className={styles.app}>
           <div className="pb-4 pt-4">
             <AppHeader />

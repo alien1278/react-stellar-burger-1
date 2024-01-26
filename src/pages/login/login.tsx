@@ -1,30 +1,32 @@
-import React, { useEffect, useRef, useState, FC, ChangeEvent, FormEvent } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  FC,
+  ChangeEvent,
+  FormEvent,
+} from "react";
 import {
   Input,
   Button,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../services/actions/users";
 import style from "./login.module.css";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
 
 const Login: FC = () => {
-  
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const { userInfo } = useAppSelector((state) => state.users);
 
-  
   const inputRef = useRef<HTMLInputElement>(null);
-
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -36,7 +38,7 @@ const Login: FC = () => {
     if (!email || !password) {
       return;
     }
-    navigate(-1);
+    //navigate(-1);
     dispatch(login(email, password));
   };
   //переход после входа
@@ -81,14 +83,14 @@ const Login: FC = () => {
       <div className={`${style.container} mt-15`}>
         <p className="text text_type_main-default text_color_inactive">
           Вы — новый пользователь?
-          <Link className={style.link} to="/register">
+          <Link className={style.link} to={`/register`}>
             Зарегистрироваться
           </Link>
         </p>
 
         <p className="text text_type_main-default text_color_inactive">
           Забыли пароль?
-          <Link className={style.link} to="/forgot-password">
+          <Link className={style.link} to={`/forgot-password`}>
             Восстановить пароль
           </Link>
         </p>

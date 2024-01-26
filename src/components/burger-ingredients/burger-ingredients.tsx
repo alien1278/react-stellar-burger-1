@@ -39,7 +39,7 @@ const BurgerIngredients: FC = () => {
   };
 
   return (
-    <div className={`${style.burger_container} mt-10`}>
+    <div className={`${style.burger_container} mt-10`} data-cy="ingridient">
       <p className="text text_type_main-medium mb-5">Coберите бургер</p>
       <div className={`${style.tab} `}>
         <Tab

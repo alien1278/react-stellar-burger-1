@@ -17,7 +17,6 @@ interface NavParams {
 }
 
 const Main: FC = () => {
-  // const modalState = useSelector((store) => store.modal);
   const modalState = useAppSelector((store) => store.modal.name);
 
   const dispatch = useAppDispatch();

@@ -5,7 +5,7 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+
 import { register } from "../../services/actions/users";
 import style from "./register.module.css";
 import { useAppDispatch } from "../../services/hook";
@@ -16,7 +16,6 @@ const Register: FC = () => {
   const [name, setName] = useState<string>("");
 
   const inputRef = useRef<HTMLInputElement>(null);
-
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -83,7 +82,7 @@ const Register: FC = () => {
       <div className={`${style.container} mt-15`}>
         <p className="text text_type_main-default text_color_inactive">
           Уже зарегистрированы?
-          <Link className={style.link} to="/login">
+          <Link className={style.link} to={`/login`}>
             Войти
           </Link>
         </p>

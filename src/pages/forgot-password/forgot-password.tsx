@@ -5,7 +5,6 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { forgotPassword } from "../../services/actions/users";
 import { useAppDispatch } from "../../services/hook";
 
@@ -25,7 +24,7 @@ const ForgotPassword: FC = () => {
     alert("Icon Click Callback");
   };
 
-  const sendData = (e:FormEvent) => {
+  const sendData = (e: FormEvent) => {
     e.preventDefault();
 
     if (!email) {
@@ -66,7 +65,7 @@ const ForgotPassword: FC = () => {
       <div className={`${style.container} mt-10`}>
         <p className="text text_type_main-default text_color_inactive ">
           Вспомнили пароль?
-          <Link className={style.link} to="/login">
+          <Link className={style.link} to={`/login`}>
             Войти
           </Link>
         </p>

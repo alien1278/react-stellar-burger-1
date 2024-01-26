@@ -1,5 +1,4 @@
-import React,{FC} from "react";
-import { useSelector } from "react-redux";
+import React, { FC } from "react";
 import { useParams } from "react-router-dom";
 import IngredientDetails from "../../components/ingredient-details/ingredient-details";
 import { useAppSelector } from "../../services/hook";
@@ -16,7 +15,7 @@ const IngredientsPage: FC = () => {
       {isListLoaded && (
         <div className={`${style.content} mt-30`}>
           <p className="text text_type_main-large p-2">Детали ингредиента</p>
-          
+
           <IngredientDetails id={navParams.id as string} />
         </div>
       )}

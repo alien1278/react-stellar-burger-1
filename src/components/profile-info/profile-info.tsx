@@ -1,5 +1,13 @@
-import { ChangeEvent, FC, FormEvent, SyntheticEvent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import {
   Input,
   Button,
@@ -25,18 +33,21 @@ const ProfileInfo: FC = () => {
   const onEmailClick = () => emailRef.current?.focus();
   const onPasswordClick = () => passwordRef.current?.focus();
 
-
-  const onNameChange = (evt:  ChangeEvent<HTMLInputElement>) => {
+  const onNameChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setName(value);
-    value === (userInfo ? userInfo.name : null) ? setIsDataChanged(false) : setIsDataChanged(true);
-};
+    value === (userInfo ? userInfo.name : null)
+      ? setIsDataChanged(false)
+      : setIsDataChanged(true);
+  };
 
-const onEmailChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  const onEmailChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setLogin(value);
-    value === (userInfo ? userInfo.email : null) ? setIsDataChanged(false) : setIsDataChanged(true);
-};
+    value === (userInfo ? userInfo.email : null)
+      ? setIsDataChanged(false)
+      : setIsDataChanged(true);
+  };
   const onPasswordChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setPassword(value);
@@ -49,13 +60,12 @@ const onEmailChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setIsDataChanged(false);
   };
 
-    const onCancelEditing = (evt: SyntheticEvent <Element, Event>) => {
-
+  const onCancelEditing = (evt: SyntheticEvent<Element, Event>) => {
     evt.preventDefault();
     if (userInfo) {
       setName(userInfo.name);
       setLogin(userInfo.email);
-  }
+    }
     setPassword("");
     setIsDataChanged(false);
   };

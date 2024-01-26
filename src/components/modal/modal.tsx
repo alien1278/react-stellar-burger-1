@@ -1,4 +1,4 @@
-import React, { useEffect,FC } from "react";
+import React, { useEffect, FC } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -8,7 +8,7 @@ import { IModalProps } from "../../utils/types";
 
 const modalRoot = document.getElementById("modalRoot");
 
-const Modal:FC<IModalProps> =({ title, onClose, children })=> {
+const Modal: FC<IModalProps> = ({ title, onClose, children }) => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       e.key === "Escape" && onClose();
@@ -22,13 +22,17 @@ const Modal:FC<IModalProps> =({ title, onClose, children })=> {
   if (!modalRoot) {
     console.error("Modal root not found");
     return null;
-}
+  }
   return ReactDOM.createPortal(
     <>
       <div className={`${style.modal} pl-10 pr-10`}>
         <div className={style.header}>
           <p className="text text_type_main-large mt-15">{title}</p>
-          <button className={`${style.button} mt-15`} onClick={onClose}>
+          <button
+            className={`${style.button} mt-15`}
+            onClick={onClose}
+            data-cy="button-close"
+          >
             <CloseIcon type="primary" />
           </button>
         </div>
@@ -38,7 +42,7 @@ const Modal:FC<IModalProps> =({ title, onClose, children })=> {
     </>,
     modalRoot
   );
-}
+};
 Modal.propTypes = {
   children: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,

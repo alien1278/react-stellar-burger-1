@@ -62,6 +62,7 @@ export const loginRequest = (email: string, password: string) => {
     headers: {
       "Content-Type": "application/json",
     },
+    mode: "cors",
     body: JSON.stringify({
       email,
       password,

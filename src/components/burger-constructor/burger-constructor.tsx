@@ -65,7 +65,11 @@ const BurgerConstructor: FC = () => {
     }
   };
   return (
-    <div className={`${style.content} mt-25 ml-4 mr-4`} ref={dropRef}>
+    <div
+      className={`${style.content} mt-25 ml-4 mr-4`}
+      ref={dropRef}
+      data-cy="constructor"
+    >
       <div className={`${style.constructor} `}>
         <div className={`${style.topElement} ml-8 mr-4`}>
           {isBun && (
@@ -123,6 +127,7 @@ const BurgerConstructor: FC = () => {
           size="medium"
           onClick={openOrderDetails}
           htmlType="submit"
+          data-cy="button-create"
         >
           Оформить заказ
         </Button>
