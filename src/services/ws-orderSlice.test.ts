@@ -7,15 +7,11 @@ import {
   wsInit,
   wsClose,
   sendMessage,
+  initialState,
 } from "./ws-orderSlice";
 import { TOrder } from "../utils/types";
 
 describe("wsOrdersSlice reducer", () => {
-  const initialState = {
-    isConnected: false,
-    data: null,
-  };
-
   const mockOrdersData = {
     orders: [
       {

@@ -3,15 +3,10 @@ import {
   getCreatedOrder,
   getCreatedOrderSuccess,
   getCreatedOrderFailed,
+  initialState,
 } from "./orderSlice";
 
 describe("orderSlice reducer", () => {
-  const initialState = {
-    createdOrder: null,
-    orderFailed: false,
-    orderRequest: false,
-  };
-
   it("должен обрабатывать начальное состояние", () => {
     expect(orderSliceReducer(undefined, { type: "unknown" })).toEqual(
       initialState

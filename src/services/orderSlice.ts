@@ -1,11 +1,11 @@
-import { IOrderPayload } from './../utils/types';
+import { IOrderPayload } from "./../utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type TOrderState = {
   createdOrder: IOrderPayload | null;
   orderFailed: boolean;
   orderRequest: boolean;
 };
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   createdOrder: null,
   orderFailed: false,
   orderRequest: false,

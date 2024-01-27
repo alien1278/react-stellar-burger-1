@@ -1,11 +1,11 @@
-import { modalSliceReducer, showModal, hideModal } from "./modalSlice";
+import {
+  modalSliceReducer,
+  showModal,
+  hideModal,
+  initialState,
+} from "./modalSlice";
 
 describe("modalSlice reducer", () => {
-  const initialState = {
-    name: undefined,
-    data: undefined,
-  };
-
   it("должен обрабатывать начальное состояние", () => {
     expect(modalSliceReducer(undefined, { type: "unknown" })).toEqual(
       initialState

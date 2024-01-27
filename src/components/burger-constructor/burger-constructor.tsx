@@ -16,6 +16,7 @@ import { sendOrder } from "../../services/actions/order";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
 import { IIngredient } from "../../utils/types";
+import { v4 } from "uuid";
 
 const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ const BurgerConstructor: FC = () => {
   const [, dropRef] = useDrop({
     accept: "ingredient",
     drop(item: IIngredient) {
-      dispatch(addIngredient({ id: item._id }));
+      dispatch(addIngredient({ id: item._id, uuid: v4() }));
     },
   });
   // console.log(chosenIngredients);

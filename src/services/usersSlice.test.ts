@@ -24,32 +24,11 @@ import {
   setForgotPasswordFailed,
   setResetPassword,
   setResetPasswordSuccess,
+  initialState,
 } from "./usersSlice";
 import { IUserData, IUserInfo } from "../utils/types";
 
 describe("usersSlice reducer", () => {
-  const initialState = {
-    registrationRequest: false,
-    registrationFailed: false,
-    token: null,
-    forgotPasswordRequest: false,
-    forgotPasswordFailed: false,
-    isForgotPassword: false,
-    resetPasswordRequest: false,
-    resetPasswordFailed: false,
-    loginRequest: false,
-    loginFailed: false,
-    logoutRequest: false,
-    logoutFailed: false,
-    userInfo: null,
-    getUserInfoRequest: false,
-    getUserInfoFailed: false,
-    sendUserInfoRequest: false,
-    sendUserInfoFailed: false,
-    refreshTokenRequest: false,
-    refreshTokenFailed: false,
-  };
-
   it("должен обрабатывать начальное состояние", () => {
     expect(usersSliceReducer(undefined, { type: "unknown" })).toEqual(
       initialState

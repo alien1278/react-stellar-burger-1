@@ -22,7 +22,7 @@ type UsersState = {
   refreshTokenRequest: boolean;
   refreshTokenFailed: boolean;
 };
-const initialState: UsersState = {
+export const initialState: UsersState = {
   registrationRequest: false,
   registrationFailed: false,
 
