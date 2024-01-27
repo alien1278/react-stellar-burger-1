@@ -1,10 +1,9 @@
 import { useLocation, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "../../services/hook";
-import { FC, ReactElement, ReactNode } from "react";
+import { FC, ReactElement } from "react";
 
 interface IProtectedRouteElement {
-  children: ReactElement
+  children: ReactElement;
 }
 
 const ProtectedRoute: FC<IProtectedRouteElement> = ({ children }) => {

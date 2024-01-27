@@ -22,7 +22,7 @@ type UsersState = {
   refreshTokenRequest: boolean;
   refreshTokenFailed: boolean;
 };
-const initialState: UsersState = {
+export const initialState: UsersState = {
   registrationRequest: false,
   registrationFailed: false,
 
@@ -165,9 +165,7 @@ const usersSlice = createSlice({
 });
 
 export const usersSliceReducer = usersSlice.reducer;
-// export const selectAccessToken = (state: RootState) => {
-//   return state.users.token;
-// };
+
 export const selectIsForgotPassword = (state: RootState) => {
   return state.users.isForgotPassword;
 };

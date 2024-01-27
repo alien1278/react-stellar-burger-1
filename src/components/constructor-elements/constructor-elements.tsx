@@ -1,4 +1,3 @@
-import { useSelector, useDispatch } from "react-redux";
 import {
   DragIcon,
   ConstructorElement,
@@ -6,7 +5,6 @@ import {
 import { FC } from "react";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { useRef } from "react";
-import PropTypes from "prop-types";
 import {
   deleteIngredient,
   sortConstructorIngredients,
@@ -14,21 +12,24 @@ import {
 import style from "../burger-constructor/burger-constructor.module.css";
 import { IDragItem, IIngredient } from "../../utils/types";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
-//import { ingredientType } from "../../utils/types";
+
 interface IConstructorElementsProps {
   ingredient: IIngredient;
   id: string;
   index: number;
 }
 
-const  ConstructorElements:FC<IConstructorElementsProps> = ({ ingredient, id, index }) => {
+const ConstructorElements: FC<IConstructorElementsProps> = ({
+  ingredient,
+  id,
+  index,
+}) => {
   const { name, price, image } = ingredient;
 
   const { chosenIngredients } = useAppSelector((state) => state.ingredients);
 
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
-
 
   const onClose = (elem: IIngredient) => {
     const del = chosenIngredients.indexOf(elem);
@@ -41,7 +42,7 @@ const  ConstructorElements:FC<IConstructorElementsProps> = ({ ingredient, id, in
 
   const [, drop] = useDrop({
     accept: "card",
-    hover: (item:IDragItem, monitor:DropTargetMonitor) => {
+    hover: (item: IDragItem, monitor: DropTargetMonitor) => {
       if (!ref.current) {
         return;
       }
@@ -56,9 +57,9 @@ const  ConstructorElements:FC<IConstructorElementsProps> = ({ ingredient, id, in
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
 
-if (!clientOffset) {
-    return;
-}
+      if (!clientOffset) {
+        return;
+      }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
@@ -86,8 +87,8 @@ if (!clientOffset) {
   drag(drop(ref));
 
   return (
-    <div ref={ref} className={`${style.element}`}>
-      <DragIcon  type="primary" />
+    <div ref={ref} className={`${style.element}`} data-cy="constructor-el">
+      <DragIcon type="primary" />
       <div className={style.constructorElement}>
         <ConstructorElement
           text={name}
@@ -98,7 +99,7 @@ if (!clientOffset) {
       </div>
     </div>
   );
-}
+};
 
 // ConstructorElements.propTypes = {
 //   ingredients: PropTypes.arrayOf(ingredientType),

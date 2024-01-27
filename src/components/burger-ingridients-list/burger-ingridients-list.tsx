@@ -1,10 +1,8 @@
-import React from "react";
 import { FC, RefObject } from "react";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 import style from "./burger-ingridients-list.module.css";
-import PropTypes from "prop-types";
-import { IIngredient } from "../../utils/types";
 
+import { IIngredient } from "../../utils/types";
 
 type TBurgerIngredientsListProps = {
   ingredients: IIngredient[];
@@ -12,14 +10,23 @@ type TBurgerIngredientsListProps = {
   elRef?: RefObject<HTMLDivElement>;
 };
 
-
-const BurgerIngredientsList: FC<TBurgerIngredientsListProps> = ({ ingredients, title, elRef }) => {
+const BurgerIngredientsList: FC<TBurgerIngredientsListProps> = ({
+  ingredients,
+  title,
+  elRef,
+}) => {
   return (
     <div ref={elRef}>
       <p className="text text_type_main-medium mt-10">{title}</p>
       <div className={style.colomn}>
         {ingredients.map((element) => {
-          return <BurgerIngredient ingredient={element} key={element._id} />;
+          return (
+            <BurgerIngredient
+              ingredient={element}
+              key={element._id}
+              data-cy="ingredient"
+            />
+          );
         })}
       </div>
     </div>

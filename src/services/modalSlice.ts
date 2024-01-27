@@ -6,7 +6,7 @@ type TModalState = {
   data?: IIngredient | any | undefined; // Adjust "any" if there are specific types you're expecting
 };
 
-const initialState: TModalState = {
+export const initialState: TModalState = {
   name: undefined, // order or details
   data: undefined,
 };

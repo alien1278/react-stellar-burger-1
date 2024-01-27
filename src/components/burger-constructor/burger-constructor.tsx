@@ -16,6 +16,7 @@ import { sendOrder } from "../../services/actions/order";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
 import { IIngredient } from "../../utils/types";
+import { v4 } from "uuid";
 
 const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ const BurgerConstructor: FC = () => {
   const [, dropRef] = useDrop({
     accept: "ingredient",
     drop(item: IIngredient) {
-      dispatch(addIngredient({ id: item._id }));
+      dispatch(addIngredient({ id: item._id, uuid: v4() }));
     },
   });
   // console.log(chosenIngredients);
@@ -65,7 +66,11 @@ const BurgerConstructor: FC = () => {
     }
   };
   return (
-    <div className={`${style.content} mt-25 ml-4 mr-4`} ref={dropRef}>
+    <div
+      className={`${style.content} mt-25 ml-4 mr-4`}
+      ref={dropRef}
+      data-cy="constructor"
+    >
       <div className={`${style.constructor} `}>
         <div className={`${style.topElement} ml-8 mr-4`}>
           {isBun && (
@@ -123,6 +128,7 @@ const BurgerConstructor: FC = () => {
           size="medium"
           onClick={openOrderDetails}
           htmlType="submit"
+          data-cy="button-create"
         >
           Оформить заказ
         </Button>

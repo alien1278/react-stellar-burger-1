@@ -9,7 +9,7 @@ type TIngredientsState = {
   ingredientsFailed: boolean;
   chosenIngredients: IIngredient[];
 };
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   list: [],
   ingredientsRequest: false,
   ingredientsFailed: false,
@@ -48,14 +48,14 @@ const newIngredientsSlice = createSlice({
     clearIngredients(state) {
       state.chosenIngredients = []; // Обнуляем массив выбранных ингредиентов
     },
-    addIngredient(state, action: PayloadAction<{ id: string }>) {
+    addIngredient(state, action: PayloadAction<{ id: string; uuid: string }>) {
       const foundIngredient = state.list.find(
         (ingredient) => ingredient._id === action.payload.id
       );
       if (!foundIngredient) return;
       const targetIngredient: IIngredient = {
         ...foundIngredient,
-        uuid: generateUniqueId(),
+        uuid: action.payload.uuid,
       };
 
       if (targetIngredient.type === "bun") {

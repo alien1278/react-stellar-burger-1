@@ -1,21 +1,18 @@
-import React, { useEffect, useRef,FC, useState, FormEvent } from "react";
+import React, { useEffect, useRef, FC, useState, FormEvent } from "react";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../../services/actions/users";
 import style from "./reset-password.module.css";
 import { useAppDispatch, useAppSelector } from "../../services/hook";
 
 const ResetPassword: FC = () => {
-  
   const [code, setCode] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [typeInput, setTypeInput] = useState<"password" | "email">("password");
   const [icon, setIcon] = useState<"ShowIcon" | "HideIcon">("ShowIcon");
-
 
   const { userInfo, isForgotPassword } = useAppSelector((state) => state.users);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +23,7 @@ const ResetPassword: FC = () => {
 
   const onIconClick = () => {
     setTimeout(() => {
-      if (inputRef.current) { 
+      if (inputRef.current) {
         inputRef.current.focus();
       }
     }, 0);
@@ -84,7 +81,6 @@ const ResetPassword: FC = () => {
             name={"code"}
             error={false}
             ref={inputRef}
-          
             errorText={"Ошибка"}
             size={"default"}
             placeholder={"Введите код из письма"}
@@ -99,7 +95,7 @@ const ResetPassword: FC = () => {
       <div className={`${style.container} mt-15`}>
         <p className="text text_type_main-default text_color_inactive">
           Вспомнили пароль?
-          <Link className={style.link} to="/login">
+          <Link className={style.link} to={`/login`}>
             Войти
           </Link>
         </p>

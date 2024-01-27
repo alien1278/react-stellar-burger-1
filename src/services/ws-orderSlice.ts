@@ -11,7 +11,7 @@ type TWsOrdersState = {
   } | null;
 };
 
-const initialState: TWsOrdersState = {
+export const initialState: TWsOrdersState = {
   isConnected: false,
   data: null,
 };

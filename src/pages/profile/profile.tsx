@@ -1,12 +1,4 @@
-import {
-  NavLink,
-  Routes,
-  Route,
-  useNavigate,
-  useParams,
-  useLocation,
-} from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { NavLink, Routes, Route, useNavigate } from "react-router-dom";
 import { logout } from "../../services/actions/users";
 import React, { FC } from "react";
 import ProfileInfo from "../../components/profile-info/profile-info";
@@ -15,14 +7,10 @@ import { useAppDispatch } from "../../services/hook";
 import OrdersFeedHistory from "../feed-history/feed-history";
 import Modal from "../../components/modal/modal";
 import FeedId from "../feed-id/feed-id";
-interface NavParams {
-  id?: string;
-}
+
 const Profile: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  let { state } = useLocation();
 
   const handleLogout = () => {
     const refreshToken = localStorage.getItem("refreshToken");

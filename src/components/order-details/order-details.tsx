@@ -1,14 +1,13 @@
 import React, { FC } from "react";
 import style from "./order-details.module.css";
 import image from "../../images/done.svg";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "../../services/hook";
 
 const OrderDetails: FC = () => {
   const { createdOrder } = useAppSelector((state) => state.order);
 
   return (
-    <div className={`${style.modal}`}>
+    <div className={`${style.modal}`} data-cy="order-details-title">
       <div className="text text_type_digits-large mb-8 ">
         {createdOrder && createdOrder.order && (
           <p>{createdOrder.order.number}</p>
